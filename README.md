@@ -1,4 +1,4 @@
 # How to clone
 ```
-git checkout https://github.com/Group2DevOpsOrg/Group2DevOps.git
+git clone https://github.com/Group2DevOpsOrg/Group2DevOps.git
 ```
