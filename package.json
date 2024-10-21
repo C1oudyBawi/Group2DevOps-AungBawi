@@ -1,7 +1,7 @@
 {
   "name": "group2devops",
   "version": "1.0.0",
-  "description": "``` git checkout https://github.com/budgetdevv/Group2DevOps.git ```",
+  "description": "``` git checkout https://github.com/Group2DevOpsOrg/Group2DevOps.git ```",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
