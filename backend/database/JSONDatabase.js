@@ -1,6 +1,6 @@
 import { tryReadJSONAsync, writeJSONAsync } from "../helpers/JsonHelpers.mjs";
 
-class JSONDatabase
+export class JSONDatabase
 {
     static DATABASE_PATH = "database.json";
 
