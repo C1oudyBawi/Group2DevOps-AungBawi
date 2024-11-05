@@ -24,6 +24,10 @@ export class JSONDatabase
         this.programs = new Map();
     }
 
+    /**
+     * @returns { Promise<JSONDatabase> }
+     * @private
+     */
     static getOrCreateDatabaseAsync = async () =>
     {
         const DATABASE_PATH = JSONDatabase.DATABASE_PATH;
