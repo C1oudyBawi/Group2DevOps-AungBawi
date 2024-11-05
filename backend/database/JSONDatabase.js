@@ -1,8 +1,10 @@
-import {tryReadJSONAsync, writeJSONAsync} from "../helpers/JsonHelpers.mjs";
+import { tryReadJSONAsync, writeJSONAsync } from "../helpers/JsonHelpers.mjs";
 
 class JSONDatabase
 {
     static DATABASE_PATH = "database.json";
+
+    static INSTANCE = await JSONDatabase.getOrCreateDatabaseAsync();
 
     /**
      * @type { Map<bigint, MemberDTO> }
