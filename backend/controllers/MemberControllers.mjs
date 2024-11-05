@@ -1,10 +1,12 @@
-import { readJSON, writeJSON } from "../utils/fileOperations.mjs";
+import { readJSON, writeJSON } from "../helpers/JsonHelpers.mjs";
 
+// Sylvester
 export const createMember = (req, res) =>
 {
 
 }
 
+// TrumpMcDonaldz
 export const updateMember = (req, res) =>
 {
 
