@@ -1,6 +1,6 @@
 import { generateSnowflake } from "../helpers/SnowflakeHelpers.mjs";
 
-class MemberDTO
+export class MemberDTO
 {
   /**
    * @type { string } // Technically, this is supposed to be a bigint, but JS doesn't serialize it well...

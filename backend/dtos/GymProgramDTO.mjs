@@ -1,4 +1,4 @@
-class GymProgramDTO
+export class GymProgramDTO
 {
   /**
    * @type { string }
