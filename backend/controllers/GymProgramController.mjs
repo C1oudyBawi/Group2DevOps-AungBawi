@@ -1,4 +1,4 @@
-import { readJSON, writeJSON } from "../helpers/JsonHelpers.mjs";
+import { tryReadJSONAsync, writeJSONAsync } from "../helpers/JsonHelpers.mjs";
 
 // Aung
 export const createProgram = (req, res) =>

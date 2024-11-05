@@ -1,27 +1,33 @@
 import { promises as fs } from "fs";
 
-export async function readJSON(filename)
+/**
+ * @param { string } filePath
+ * @returns { Promise<any | null> }
+ */
+export async function tryReadJSONAsync(filePath)
 {
     try
     {
-        const data = await fs.readFile(filename, "utf8");
+        const data = await fs.readFile(filePath, "utf8");
         return JSON.parse(data);
     }
 
-    catch (err)
+    catch
     {
-        console.error(err);
-        throw err;
+        return null;
     }
 }
 
-export async function writeJSON(object, filename) {
+/**
+ * @param { object } object
+ * @param { string } filePath
+ * @returns { Promise }
+ */
+export async function writeJSONAsync(object, filePath)
+{
     try
     {
-        const allObjects = await readJSON(filename);
-        allObjects.push(object);
-        await fs.writeFile(filename, JSON.stringify(allObjects), "utf8");
-        return allObjects;
+        await fs.writeFile(filePath, JSON.stringify(object), "utf8");
     }
 
     catch (err)
