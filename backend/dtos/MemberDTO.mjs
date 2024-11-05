@@ -1,7 +1,9 @@
+import { generateSnowflake } from "../helpers/SnowflakeHelpers.mjs";
+
 class MemberDTO
 {
   /**
-   * @type { bigint }
+   * @type { string } // Technically, this is supposed to be a bigint, but JS doesn't serialize it well...
    * @public
    */
   id;
@@ -24,9 +26,9 @@ class MemberDTO
    */
   gym_programs;
 
-  constructor({ id, name, email })
+  constructor({ name, email })
   {
-    this.id = id;
+    this.id = `${generateSnowflake()}`;
     this.name = name;
     this.admin_number = email;
     this.gym_programs = [];
