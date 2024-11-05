@@ -4,10 +4,8 @@ export class JSONDatabase
 {
     static DATABASE_PATH = "database.json";
 
-    static INSTANCE = await JSONDatabase.getOrCreateDatabaseAsync();
-
     /**
-     * @type { Map<bigint, MemberDTO> }
+     * @type { Map<string, MemberDTO> }
      * @public
      */
     members;
@@ -34,7 +32,18 @@ export class JSONDatabase
 
         let database = await tryReadJSONAsync(DATABASE_PATH);
 
-        if (database === null)
+        if (database !== null)
+        {
+            // TODO: FIX THIS
+
+            // https://stackoverflow.com/questions/38922990/re-associating-an-object-with-its-class-after-deserialization-in-node-js
+            database = Object.create(
+                JSONDatabase.prototype,
+                Object.getOwnPropertyDescriptors(database)
+            );
+        }
+
+        else
         {
             database = new JSONDatabase();
             await writeJSONAsync(database, DATABASE_PATH);
@@ -51,3 +60,5 @@ export class JSONDatabase
         return writeJSONAsync(this, JSONDatabase.DATABASE_PATH);
     }
 }
+
+export const DB_INSTANCE = await JSONDatabase.getOrCreateDatabaseAsync();
