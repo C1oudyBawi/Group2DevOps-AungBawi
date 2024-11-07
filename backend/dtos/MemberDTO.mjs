@@ -26,11 +26,11 @@ export class MemberDTO
    */
   gymPrograms;
 
-  constructor({ name, adminNumber })
+  constructor({ name, adminNumber, gymPrograms })
   {
     this.id = `${generateSnowflake()}`;
     this.name = name;
     this.adminNumber = adminNumber;
-    this.gymPrograms = [];
+    this.gymPrograms = gymPrograms;
   }
 }
