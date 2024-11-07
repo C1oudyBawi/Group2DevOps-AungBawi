@@ -1,5 +1,5 @@
 import { DB_INSTANCE } from "../database/JSONDatabase.mjs";
-import { GetGymProgramsDTO } from "../dtos/GetGymProgramsDTO.js";
+import { GetGymProgramsDTO } from "../dtos/GetGymProgramsDTO.mjs";
 
 export const getProgramsAsync = async (req, res) =>
 {
