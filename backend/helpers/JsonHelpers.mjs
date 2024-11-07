@@ -52,7 +52,8 @@ export async function writeJSONAsync(object, filePath)
 {
     try
     {
-        await fs.writeFile(filePath, JSON.stringify(object, replacer), "utf8");
+        // Make JSON pretty
+        await fs.writeFile(filePath, JSON.stringify(object, replacer, 4), "utf8");
     }
 
     catch (err)

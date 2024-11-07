@@ -1,4 +1,5 @@
 import { tryReadJSONAsync, writeJSONAsync } from "../helpers/JsonHelpers.mjs";
+import {plainToClass} from "class-transformer";
 
 export class JSONDatabase
 {
@@ -34,13 +35,13 @@ export class JSONDatabase
 
         if (database !== null)
         {
-            // TODO: FIX THIS
+            // // https://stackoverflow.com/questions/38922990/re-associating-an-object-with-its-class-after-deserialization-in-node-js
+            // database = Object.create(
+            //     JSONDatabase.prototype,
+            //     Object.getOwnPropertyDescriptors(database)
+            // );
 
-            // https://stackoverflow.com/questions/38922990/re-associating-an-object-with-its-class-after-deserialization-in-node-js
-            database = Object.create(
-                JSONDatabase.prototype,
-                Object.getOwnPropertyDescriptors(database)
-            );
+            database = plainToClass(JSONDatabase, database);
         }
 
         else
