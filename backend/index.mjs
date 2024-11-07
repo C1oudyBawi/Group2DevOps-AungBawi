@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { MEMBERS_ROUTER } from "./routes/MemberRoutes.mjs";
-import { gymPrograms_ROUTER } from "./routes/GymProgramRoutes.mjs";
+import { GYM_PROGRAMS_ROUTER } from "./routes/GymProgramRoutes.mjs";
 
 export let app = express();
 
@@ -15,7 +15,7 @@ app.use(express.static("./public"));
 const ROUTER = express.Router();
 
 ROUTER.use("/members", MEMBERS_ROUTER);
-ROUTER.use("/gym-programs", gymPrograms_ROUTER);
+ROUTER.use("/gym-programs", GYM_PROGRAMS_ROUTER);
 
 app.get("/", (req, res) =>
 {
