@@ -1,9 +1,42 @@
 import { readJSON, writeJSON } from "../utils/fileOperations.mjs";
+import { Member } from '../models/Member.mjs'; 
 
-export const createMember = (req, res) =>
+export const createMember = async(req, res) =>
 {
+    try {
+        const { name, email, admin_number, gym_programs } = req.body;
+        
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        const nameRegex = /^[a-zA-Z\s-]+$/; 
 
-}
+        if (!name || !name.trim() || !nameRegex.test(name)) {
+            return res.status(400).json({ message: 'Invalid name. It should contain only alphabetic characters and spaces.' });
+        }
+        
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ message: 'Invalid email format.' });
+        }
+        
+        const adminNumberRegex = /^\d{7}[A-Z]$/;
+        if (!adminNumberRegex.test(admin_number)) {
+            return res.status(400).json({ message: 'Invalid admin number format. It should consist of 7 digits followed by 1 uppercase letter (e.g., 2304806I).' });
+        } 
+        
+        const programSet = new Set(gym_programs);
+        if (programSet.size !== gym_programs.length) {
+            return res.status(400).json({ message: 'Duplicate gym program IDs are not allowed.' });
+        }
+
+        const newMember = new Member(name, email, admin_number, Array.from(programSet));
+        const updatedMembers = await writeJSON(newMember, 'controllers/members.json');
+
+        return res.status(201).json(updatedMembers);
+        
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
 
 export const updateMember = (req, res) =>
 {
