@@ -36,12 +36,12 @@ export const updateMemberAsync = async (req, res) =>
         member.name = body.name;
     }
 
-    if (body.admin_number !== undefined)
+    if (body.adminNumber !== undefined)
     {
-        member.admin_number = body.admin_number;
+        member.adminNumber = body.adminNumber;
     }
 
-    let gymPrograms = body.gym_programs;
+    let gymPrograms = body.gymPrograms;
 
     if (gymPrograms !== undefined && Array.isArray(gymPrograms))
     {
@@ -57,14 +57,14 @@ export const updateMemberAsync = async (req, res) =>
                 return;
             }
 
-            if (!targetProgram.is_active)
+            if (!targetProgram.isActive)
             {
                 res.status(400).json({ message: `Program ( Name: ${programName} ) is inactive!` });
                 return;
             }
         }
 
-        member.gym_programs = Array.from(gymPrograms);
+        member.gymPrograms = Array.from(gymPrograms);
     }
 
     await database.updateAsync();
