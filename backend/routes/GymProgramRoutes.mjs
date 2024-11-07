@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { createProgram } from "../controllers/GymProgramCreateController.mjs";
+import { getProgramsAsync } from "../controllers/GymProgramGetController.mjs";
 import { updateProgram } from "../controllers/GymProgramUpdateController.mjs";
-import {getProgramsAsync} from "../controllers/GymProgramGetController.mjs";
 
 export const GYM_PROGRAMS_ROUTER = Router();
 
