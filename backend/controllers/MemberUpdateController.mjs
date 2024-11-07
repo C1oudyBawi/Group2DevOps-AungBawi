@@ -45,17 +45,10 @@ export const updateMemberAsync = async (req, res) =>
 
     if (gymPrograms !== undefined && Array.isArray(gymPrograms))
     {
-        let uniqueGymPrograms = new Set();
+        gymPrograms = new Set(gymPrograms);
 
-        for (let programName of body.gym_programs)
+        for (let programName of gymPrograms)
         {
-            if (uniqueGymPrograms.has(programName))
-            {
-                continue;
-            }
-
-            uniqueGymPrograms.add(programName);
-
             let targetProgram = database.programs.get(programName);
 
             if (targetProgram === undefined)
@@ -71,7 +64,7 @@ export const updateMemberAsync = async (req, res) =>
             }
         }
 
-        member.gym_programs = Array.from(uniqueGymPrograms);
+        member.gym_programs = Array.from(gymPrograms);
     }
 
     await database.updateAsync();
