@@ -1,5 +1,3 @@
-import { tryReadJSONAsync, writeJSONAsync } from "../helpers/JsonHelpers.mjs";
-
 // Aung
 export const createProgram = (req, res) =>
 {
@@ -14,10 +12,4 @@ export const createProgram = (req, res) =>
     }
 
     res.json({ message: `Program ${programName} created` });
-}
-
-// Ohk
-export const updateProgram = (req, res) =>
-{
-
 }

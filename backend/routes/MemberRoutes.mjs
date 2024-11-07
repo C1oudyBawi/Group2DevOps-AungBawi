@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { createMemberAsync, updateMemberAsync } from "../controllers/MemberControllers.mjs";
+import { createMemberAsync } from "../controllers/MemberCreateController.mjs";
+import { updateMemberAsync } from "../controllers/MemberUpdateController.mjs";
 
 export const MEMBERS_ROUTER = Router();
 
