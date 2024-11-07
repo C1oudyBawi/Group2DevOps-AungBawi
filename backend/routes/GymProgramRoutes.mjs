@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { createProgram, updateProgram } from "../controllers/GymProgramController.mjs";
+import { createProgram } from "../controllers/GymProgramCreateController.mjs";
+import { updateProgram } from "../controllers/GymProgramUpdateController.mjs";
 
 export const GYM_PROGRAMS_ROUTER = Router();
 
