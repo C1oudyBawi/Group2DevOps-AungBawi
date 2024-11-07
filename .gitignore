@@ -466,3 +466,6 @@ appsettings.json
 
 # Ignore .idea
 .idea/
+
+# Ignore JSON database
+/backend/database.json
