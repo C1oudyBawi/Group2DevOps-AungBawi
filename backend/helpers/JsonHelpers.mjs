@@ -4,24 +4,29 @@ import { promises as fs } from "fs";
 
 function replacer(key, value)
 {
-    if(value instanceof Map)
+    if (value instanceof Map)
     {
         return {
             dataType: "Map",
-            value: Array.from(value.entries()), // or with spread: value: [...value]
+            value: Array.from(value.entries()),
         };
     }
+
     else
     {
         return value;
     }
 }
-function reviver(key, value) {
-    if(typeof value === "object" && value !== null) {
-        if (value.dataType === "Map") {
+function reviver(key, value)
+{
+    if (value !== null && typeof value === "object")
+    {
+        if (value.dataType === "Map")
+        {
             return new Map(value.value);
         }
     }
+
     return value;
 }
 

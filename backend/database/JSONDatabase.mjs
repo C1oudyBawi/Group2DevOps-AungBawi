@@ -1,5 +1,7 @@
 import { tryReadJSONAsync, writeJSONAsync } from "../helpers/JsonHelpers.mjs";
-import {plainToClass} from "class-transformer";
+import { plainToClass, plainToClassFromExist} from "class-transformer";
+import { MemberDTO } from "../dtos/MemberDTO.mjs";
+import { GymProgramDTO } from "../dtos/GymProgramDTO.mjs";
 
 export class JSONDatabase
 {
@@ -31,6 +33,9 @@ export class JSONDatabase
     {
         const DATABASE_PATH = JSONDatabase.DATABASE_PATH;
 
+        /**
+         * @type { JSONDatabase }
+         */
         let database = await tryReadJSONAsync(DATABASE_PATH);
 
         if (database !== null)
@@ -42,6 +47,39 @@ export class JSONDatabase
             // );
 
             database = plainToClass(JSONDatabase, database);
+
+            // Members is currently in the form of Map<string, Map>
+            // See: https://github.com/typestack/class-transformer/issues/288
+            let members = database.members;
+
+            for (let [key, value] of members)
+            {
+                let rawData = Object.fromEntries(value.entries());
+
+                // Apparently plainToClass() doesn't work if you have a non-paramless ctor.
+                // Stupid but it is what it is.
+                // See: https://github.com/typestack/class-transformer/issues/132
+
+                // Construct MemberDTO instance, bypassing ctor.
+                let member = Reflect.construct(Object, [], MemberDTO);
+
+                member = plainToClassFromExist(member, rawData);
+
+                members.set(key, member);
+            }
+
+            let programs = database.programs;
+
+            for (let [key, value] of programs)
+            {
+                let rawData = Object.fromEntries(value.entries());
+
+                let program = Reflect.construct(Object, [], GymProgramDTO);
+
+                program = plainToClassFromExist(program, rawData);
+
+                programs.set(key, program);
+            }
         }
 
         else

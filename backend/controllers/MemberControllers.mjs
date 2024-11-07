@@ -1,6 +1,7 @@
 import { tryReadJSONAsync, writeJSONAsync } from "../helpers/JsonHelpers.mjs";
 import { DB_INSTANCE } from "../database/JSONDatabase.mjs";
 import { MemberDTO } from "../dtos/MemberDTO.mjs";
+import {plainToClass} from "class-transformer";
 
 // Sylvester
 export const createMemberAsync = async (req, res) =>
@@ -53,36 +54,49 @@ export const updateMemberAsync = async (req, res) =>
     let body = req.body;
 
     // TODO: Validate more stuff
-    member.name = body.name;
-    member.admin_number = body.admin_number;
 
-    let uniqueGymPrograms = new Set();
-
-    for (let programName of uniqueGymPrograms.keys())
+    if (body.name !== undefined)
     {
-        if (uniqueGymPrograms.has(programName))
-        {
-            continue;
-        }
-
-        uniqueGymPrograms.add(programName);
-
-        let targetProgram = database.programs.get(programName);
-
-        if (targetProgram === undefined)
-        {
-            res.status(404).json({ message: `Program ( Name: ${programName} ) not found!` });
-            return;
-        }
-
-        if (!targetProgram.is_active)
-        {
-            res.status(400).json({ message: `Program ( Name: ${programName} ) is inactive!` });
-            return;
-        }
+        member.name = body.name;
     }
 
-    member.gym_programs = Array.from(uniqueGymPrograms);
+    if (body.admin_number !== undefined)
+    {
+        member.admin_number = body.admin_number;
+    }
+
+    let gymPrograms = body.gym_programs;
+
+    if (gymPrograms !== undefined && Array.isArray(gymPrograms))
+    {
+        let uniqueGymPrograms = new Set();
+
+        for (let programName of body.gym_programs)
+        {
+            if (uniqueGymPrograms.has(programName))
+            {
+                continue;
+            }
+
+            uniqueGymPrograms.add(programName);
+
+            let targetProgram = database.programs.get(programName);
+
+            if (targetProgram === undefined)
+            {
+                res.status(404).json({ message: `Program ( Name: ${programName} ) not found!` });
+                return;
+            }
+
+            if (!targetProgram.is_active)
+            {
+                res.status(400).json({ message: `Program ( Name: ${programName} ) is inactive!` });
+                return;
+            }
+        }
+
+        member.gym_programs = Array.from(uniqueGymPrograms);
+    }
 
     await database.updateAsync();
 
