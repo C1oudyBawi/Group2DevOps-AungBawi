@@ -7,7 +7,7 @@ export const createProgram = async (req, res) => {
     const errors = [];
 
     let name = programData.name;
-    let isActive = programData.isActive;
+    let isActive = programData.isActive ?? true;
 
     if (!name || typeof name !== 'string') {
         errors.push("Name is required and should be a string.")
