@@ -18,19 +18,19 @@ export class MemberDTO
    * @type { string }
    * @public
    */
-  admin_number;
+  adminNumber;
 
   /**
    * @type { GymProgramDTO[] }
    * @public
    */
-  gym_programs;
+  gymPrograms;
 
-  constructor({ name, admin_number })
+  constructor({ name, adminNumber })
   {
     this.id = `${generateSnowflake()}`;
     this.name = name;
-    this.admin_number = admin_number;
-    this.gym_programs = [];
+    this.adminNumber = adminNumber;
+    this.gymPrograms = [];
   }
 }

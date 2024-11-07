@@ -10,11 +10,11 @@ export class GymProgramDTO
    * @type { boolean }
    * @public
    */
-  is_active;
+  isActive;
 
-  constructor({ name, is_active })
+  constructor({ name, isActive })
   {
     this.name = name;
-    this.is_active = is_active;
+    this.isActive = isActive;
   }
 }

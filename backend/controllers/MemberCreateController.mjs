@@ -7,7 +7,7 @@ export const createMemberAsync = async(req, res) =>
     {
         let database = DB_INSTANCE;
 
-        let { name, admin_number, gym_programs } = req.body;
+        let { name, adminNumber, gymPrograms } = req.body;
 
         const nameRegex = /^[a-zA-Z\s-]+$/;
 
@@ -17,16 +17,16 @@ export const createMemberAsync = async(req, res) =>
         }
 
         const adminNumberRegex = /^\d{7}[A-Z]$/;
-        if (!adminNumberRegex.test(admin_number))
+        if (!adminNumberRegex.test(adminNumber))
         {
             return res.status(400).json({ message: 'Invalid admin number format. It should consist of 7 digits followed by 1 uppercase letter (e.g., 2304806I).' });
         }
 
-        gym_programs = new Set(gym_programs);
+        gymPrograms = new Set(gymPrograms);
 
         let existing_programs = database.programs;
 
-        for (let programName of gym_programs)
+        for (let programName of gymPrograms)
         {
             let targetProgram = existing_programs.get(programName);
 
@@ -36,7 +36,7 @@ export const createMemberAsync = async(req, res) =>
                 return;
             }
 
-            if (!targetProgram.is_active)
+            if (!targetProgram.isActive)
             {
                 res.status(400).json({ message: `Program ( Name: ${programName} ) is inactive!` });
                 return;
@@ -44,11 +44,11 @@ export const createMemberAsync = async(req, res) =>
         }
 
         let member = new MemberDTO(
-            {
-                name: name,
-                admin_number: admin_number,
-                gym_programs: Array.from(gym_programs),
-            });
+        {
+            name: name,
+            adminNumber: adminNumber,
+            gymPrograms: Array.from(gymPrograms),
+        });
 
         let generatedID = member.id;
 
@@ -57,7 +57,6 @@ export const createMemberAsync = async(req, res) =>
         await database.updateAsync();
 
         res.json({ message: `Member ( ID: ${generatedID} ) created successfully!` });
-
     }
 
     catch (error)
