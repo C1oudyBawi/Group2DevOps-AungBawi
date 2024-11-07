@@ -1,27 +1,64 @@
 import { promises as fs } from "fs";
 
-export async function readJSON(filename)
+// https://stackoverflow.com/questions/29085197/how-do-you-json-stringify-an-es6-map
+
+function replacer(key, value)
+{
+    if (value instanceof Map)
+    {
+        return {
+            dataType: "Map",
+            value: Array.from(value.entries()),
+        };
+    }
+
+    else
+    {
+        return value;
+    }
+}
+function reviver(key, value)
+{
+    if (value !== null && typeof value === "object")
+    {
+        if (value.dataType === "Map")
+        {
+            return new Map(value.value);
+        }
+    }
+
+    return value;
+}
+
+/**
+ * @param { string } filePath
+ * @returns { Promise<any | null> }
+ */
+export async function tryReadJSONAsync(filePath)
 {
     try
     {
-        const data = await fs.readFile(filename, "utf8");
-        return JSON.parse(data);
+        const data = await fs.readFile(filePath, "utf8");
+        return JSON.parse(data, reviver);
     }
 
-    catch (err)
+    catch
     {
-        console.error(err);
-        throw err;
+        return null;
     }
 }
 
-export async function writeJSON(object, filename) {
+/**
+ * @param { object } object
+ * @param { string } filePath
+ * @returns { Promise }
+ */
+export async function writeJSONAsync(object, filePath)
+{
     try
     {
-        const allObjects = await readJSON(filename);
-        allObjects.push(object);
-        await fs.writeFile(filename, JSON.stringify(allObjects), "utf8");
-        return allObjects;
+        // Make JSON pretty
+        await fs.writeFile(filePath, JSON.stringify(object, replacer, 4), "utf8");
     }
 
     catch (err)
