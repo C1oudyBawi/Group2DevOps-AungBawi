@@ -1,5 +1,7 @@
 import { DB_INSTANCE } from "../database/JSONDatabase.mjs";
-import { MemberDTO } from "../dtos/MemberDTO.mjs";
+import { MemberUpdateDTOSchema } from "../dtos/MemberDTO.mjs";
+import { GymProgramIsActiveDTOSchema } from "../dtos/GymProgramDTO.mjs";
+import { ZodError, ZodIssueCode } from "zod";
 
 // TrumpMcDonaldz
 export const updateMemberAsync = async (req, res) =>
@@ -24,12 +26,15 @@ export const updateMemberAsync = async (req, res) =>
         return;
     }
 
-    /**
-     * @type { MemberDTO }
-     */
-    let body = req.body;
+    let parsedMember = await MemberUpdateDTOSchema.safeParseAsync(req.body);
 
-    // TODO: Validate more stuff
+    if (!parsedMember.success)
+    {
+        res.status(400).json({ message: parsedMember.error.errors });
+        return;
+    }
+
+    let body = parsedMember.data;
 
     if (body.name !== undefined)
     {
@@ -43,25 +48,42 @@ export const updateMemberAsync = async (req, res) =>
 
     let gymPrograms = body.gymPrograms;
 
-    if (gymPrograms !== undefined && Array.isArray(gymPrograms))
+    if (gymPrograms !== undefined)
     {
-        gymPrograms = new Set(gymPrograms);
-
         for (let programName of gymPrograms)
         {
             let targetProgram = database.programs.get(programName);
 
             if (targetProgram === undefined)
             {
-                res.status(404).json({ message: `Program ( Name: ${programName} ) not found!` });
+                res.status(404).json(
+                {
+                    message: new ZodError(
+                    [
+                        // https://zod.dev/ERROR_HANDLING?id=zodissue
+                        {
+                            code: ZodIssueCode.custom,
+                            message: `Program ( Name: ${programName} ) not found!`,
+                            path: [ "gymPrograms" ],
+                        }
+                    ])
+                });
                 return;
             }
 
-            if (!targetProgram.isActive)
+            let parsedProgram = await GymProgramIsActiveDTOSchema.safeParseAsync(targetProgram);
+
+            if (!parsedProgram.success)
             {
-                res.status(400).json({ message: `Program ( Name: ${programName} ) is inactive!` });
+                res.status(404).json({ message: parsedProgram.error.errors });
                 return;
             }
+
+            // if (!targetProgram.isActive)
+            // {
+            //     res.status(400).json({ message: `Program ( Name: ${programName} ) is inactive!` });
+            //     return;
+            // }
         }
 
         member.gymPrograms = Array.from(gymPrograms);
