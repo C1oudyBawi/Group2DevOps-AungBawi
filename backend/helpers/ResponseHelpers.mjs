@@ -1,12 +1,14 @@
 import { StatusCodes } from "http-status-codes";
-import { Response } from "express";
 import { ErrorIssueDTO } from "../dtos/ErrorIssueDTO.mjs";
 import { ErrorDTO } from "../dtos/ErrorDTO.mjs";
-import { ZodIssue } from "zod";
+// noinspection ES6UnusedImports
+import express from "express";
+// noinspection ES6UnusedImports
+import { z } from "zod";
 
 /**
- * @param { Response } res
- * @param { ErrorIssueDTO | ZodIssue } error
+ * @param { express.Response } res
+ * @param { ErrorIssueDTO | z.ZodIssue } error
  */
 export const respondWithBadRequestError = (res, error) =>
 {
@@ -14,8 +16,8 @@ export const respondWithBadRequestError = (res, error) =>
 }
 
 /**
- * @param { Response } res
- * @param { ErrorIssueDTO[] | ZodIssue[] } errors
+ * @param { express.Response } res
+ * @param { ErrorIssueDTO[] | z.ZodIssue[] } errors
  */
 export const respondWithBadRequestErrors = (res, errors) =>
 {
@@ -23,8 +25,8 @@ export const respondWithBadRequestErrors = (res, errors) =>
 }
 
 /**
- * @param { Response } res
- * @param { ErrorIssueDTO | ZodIssue } error
+ * @param { express.Response } res
+ * @param { ErrorIssueDTO | z.ZodIssue } error
  */
 export const respondWithNotFoundError = (res, error) =>
 {
@@ -32,8 +34,8 @@ export const respondWithNotFoundError = (res, error) =>
 }
 
 /**
- * @param { Response } res
- * @param { ErrorIssueDTO[] | ZodIssue[] } errors
+ * @param { express.Response } res
+ * @param { ErrorIssueDTO[] | z.ZodIssue[] } errors
  */
 export const respondWithNotFoundErrors = (res, errors) =>
 {
