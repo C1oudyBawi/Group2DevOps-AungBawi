@@ -21,19 +21,25 @@
 
         <div class="row justify-content-center mt-3">
             <div class="col-md-2 text-right">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#memberModal">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#member-modal">
                     Create Member
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="memberModal" tabindex="-1" role="dialog" aria-labelledby="memberModalLabel"
-        aria-hidden="true">
+    <!-- Modal -->
+    <div id="member-modal"
+         class="modal fade"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="member-modal-label"
+         aria-hidden="true"
+    >
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="memberModalLabel">Add New Member</h5>
+                    <h5 class="modal-title" id="member-modal-label">Add New Member</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -41,18 +47,18 @@
                 <div class="modal-body">
                     <form id="memberForm">
                         <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
+                            <label for="member-modal-name">Name</label>
+                            <input type="text" class="form-control" id="member-modal-name" placeholder="Enter your name" required>
                         </div>
                         <div class="form-group">
-                            <label for="admin_number">Admin Number</label>
-                            <input type="text" class="form-control" id="admin_number" placeholder="Enter your Admin Number" required>
+                            <label for="member-modal-admin-number">Admin Number</label>
+                            <input type="text" class="form-control" id="member-modal-admin-number" placeholder="Enter your Admin Number" required>
                         </div>
                         <div class="form-group">
-                            <label for="gym_programs">Gym Programs</label>
-                            <input type="text" class="form-control" id="gym_programs" placeholder="Enter gym programs (comma-separated)">
+                            <label for="member-modal-gym-programs">Gym Programs</label>
+                            <input type="text" class="form-control" id="member-modal-gym-programs" placeholder="Enter gym programs (comma-separated)">
                         </div>
-                        <p id="message" class="text-right"></p>
+                        <p id="member-modal-message" class="text-right"></p>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -62,6 +68,7 @@
             </div>
         </div>
     </div>
+
 
 </body>
 
