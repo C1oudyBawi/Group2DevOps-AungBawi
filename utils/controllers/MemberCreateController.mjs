@@ -1,5 +1,5 @@
 import { DB_INSTANCE } from "../database/JSONDatabase.mjs";
-import { MemberDTO } from "../dtos/MemberDTO.mjs";
+import { MemberDTO } from "../../dtos/MemberDTO.mjs";
 
 export const createMemberAsync = async(req, res) =>
 {

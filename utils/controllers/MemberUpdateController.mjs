@@ -1,7 +1,7 @@
 import { DB_INSTANCE } from "../database/JSONDatabase.mjs";
-import { MemberUpdateDTOSchema } from "../dtos/MemberDTO.mjs";
-import { GymProgramIsActiveDTOSchema } from "../dtos/GymProgramDTO.mjs";
-import { ErrorIssueDTO } from "../dtos/ErrorIssueDTO.mjs";
+import { MemberUpdateDTOSchema } from "../../dtos/MemberDTO.mjs";
+import { GymProgramIsActiveDTOSchema } from "../../dtos/GymProgramDTO.mjs";
+import { ErrorIssueDTO } from "../../dtos/ErrorIssueDTO.mjs";
 import
 {
     respondWithBadRequestError,
