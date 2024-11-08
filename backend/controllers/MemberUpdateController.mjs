@@ -1,7 +1,13 @@
 import { DB_INSTANCE } from "../database/JSONDatabase.mjs";
 import { MemberUpdateDTOSchema } from "../dtos/MemberDTO.mjs";
 import { GymProgramIsActiveDTOSchema } from "../dtos/GymProgramDTO.mjs";
-import { ZodError, ZodIssueCode } from "zod";
+import { ErrorIssueDTO } from "../dtos/ErrorIssueDTO.mjs";
+import
+{
+    respondWithBadRequestError,
+    respondWithBadRequestErrors,
+    respondWithNotFoundError,
+} from "../helpers/ResponseHelpers.mjs";
 
 // TrumpMcDonaldz
 export const updateMemberAsync = async (req, res) =>
@@ -12,7 +18,14 @@ export const updateMemberAsync = async (req, res) =>
 
     if (memberID === undefined)
     {
-        res.status(400).json({ message: "Member ID not provided!" });
+        respondWithNotFoundError(
+            res,
+            new ErrorIssueDTO(
+                {
+                    message: `Member ( ID: ${memberID} ) not defined!`,
+                    path: "/id",
+                })
+        );
         return;
     }
 
@@ -20,7 +33,14 @@ export const updateMemberAsync = async (req, res) =>
 
     if (member === undefined)
     {
-        res.status(404).json({ message: "Member not found!" });
+        respondWithNotFoundError(
+            res,
+            new ErrorIssueDTO(
+            {
+                message: `Member ( ID: ${memberID} ) not found!`,
+                path: "/id",
+            })
+        );
         return;
     }
 
@@ -28,7 +48,7 @@ export const updateMemberAsync = async (req, res) =>
 
     if (!parsedMember.success)
     {
-        res.status(400).json({ message: parsedMember.error.errors });
+        respondWithBadRequestErrors(res, parsedMember.error.errors);
         return;
     }
 
@@ -54,18 +74,14 @@ export const updateMemberAsync = async (req, res) =>
 
             if (targetProgram === undefined)
             {
-                res.status(404).json(
-                {
-                    message: new ZodError(
-                    [
-                        // https://zod.dev/ERROR_HANDLING?id=zodissue
-                        {
-                            code: ZodIssueCode.custom,
-                            message: `Program ( Name: ${programName} ) not found!`,
-                            path: [ "gymPrograms" ],
-                        }
-                    ])
-                });
+                respondWithBadRequestError(
+                    res,
+                    new ErrorIssueDTO(
+                    {
+                        message: `Program ( Name: ${programName} ) not found!`,
+                        path: "gymPrograms",
+                    })
+                );
                 return;
             }
 
@@ -73,15 +89,9 @@ export const updateMemberAsync = async (req, res) =>
 
             if (!parsedProgram.success)
             {
-                res.status(404).json({ message: parsedProgram.error.errors });
+                respondWithBadRequestErrors(res, parsedProgram.error.errors);
                 return;
             }
-
-            // if (!targetProgram.isActive)
-            // {
-            //     res.status(400).json({ message: `Program ( Name: ${programName} ) is inactive!` });
-            //     return;
-            // }
         }
 
         member.gymPrograms = Array.from(gymPrograms);
