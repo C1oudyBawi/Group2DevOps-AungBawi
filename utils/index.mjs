@@ -12,10 +12,10 @@ const PORT = process.env.PORT || 5050;
 const START_PAGE = "index.html";
 
 const CORS_OPTIONS =
-    {
-        origin: true,
-        optionsSuccessStatus: 200
-    };
+{
+    origin: true,
+    optionsSuccessStatus: 200
+};
 
 app.use(cors(CORS_OPTIONS));
 
@@ -27,6 +27,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 app.use(express.static(path.join(__dirname, "../public")));
+app.use("/dtos", express.static(path.join(__dirname, "../dtos")));
 
 const ROUTER = express.Router();
 

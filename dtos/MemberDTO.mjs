@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { generateSnowflake } from "../helpers/SnowflakeHelpers.mjs";
+import { generateSnowflake } from "../utils/helpers/SnowflakeHelpers.mjs";
 import { isAlpha } from "class-validator";
 
 export const MemberDTOSchema = z.object(

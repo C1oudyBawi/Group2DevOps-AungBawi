@@ -1,7 +1,7 @@
 import { tryReadJSONAsync, writeJSONAsync } from "../helpers/JsonHelpers.mjs";
 import { plainToClass, plainToClassFromExist} from "class-transformer";
-import { MemberDTO } from "../dtos/MemberDTO.mjs";
-import { GymProgramDTO } from "../dtos/GymProgramDTO.mjs";
+import { MemberDTO } from "../../dtos/MemberDTO.mjs";
+import { GymProgramDTO } from "../../dtos/GymProgramDTO.mjs";
 
 export class JSONDatabase
 {
