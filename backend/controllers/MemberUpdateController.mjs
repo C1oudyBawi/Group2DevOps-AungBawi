@@ -6,8 +6,6 @@ import { ZodError, ZodIssueCode } from "zod";
 // TrumpMcDonaldz
 export const updateMemberAsync = async (req, res) =>
 {
-    // Dummy update method for testing purposes
-
     let database = DB_INSTANCE;
 
     let memberID = req.params.id;
