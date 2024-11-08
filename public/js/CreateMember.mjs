@@ -1,3 +1,7 @@
+// For modules ( .mjs ), we need to export the function
+
+window.createMember = createMember;
+
 export function createMember() {
     let response = "";
 
