@@ -14,20 +14,8 @@ export const updateMemberAsync = async (req, res) =>
 {
     let database = DB_INSTANCE;
 
+    // We will never hit this route if id is undefined
     let memberID = req.params.id;
-
-    if (memberID === undefined)
-    {
-        respondWithNotFoundError(
-            res,
-            new ErrorIssueDTO(
-                {
-                    message: `Member ( ID: ${memberID} ) not defined!`,
-                    path: "/id",
-                })
-        );
-        return;
-    }
 
     let member = database.members.get(memberID);
 
