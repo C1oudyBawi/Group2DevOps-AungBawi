@@ -24,11 +24,15 @@ export function createMember() {
     request.open("POST", "/api/members/create", true); 
     request.setRequestHeader('Content-Type', 'application/json');
 
-    request.onload = function () {
+    request.onload = function ()
+    {
+        let success = request.status === 200;
+
         response = JSON.parse(request.responseText);
 
         // Check for successful creation
-        if (response.message && response.message.includes("created successfully")) {
+        // TODO: Change backend to return 201 status code
+        if (success){
             document.getElementById("message").innerHTML = `Added Member: ${jsonData.name}!`;
             document.getElementById("message").setAttribute("class", "text-success");
 
