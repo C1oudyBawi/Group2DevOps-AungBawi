@@ -12,6 +12,8 @@ export class ElementCollection
 
     static EMBER_MODAL_MESSAGE_ID = "member-modal-message";
 
+    static MEMBER_LIST_CONTAINER_ID = "member-list-container";
+
     static getMemberModal()
     {
         return document.getElementById(ElementCollection.MEMBER_MODAL_ID);
@@ -40,6 +42,11 @@ export class ElementCollection
     static getMemberModalMessage()
     {
         return document.getElementById(ElementCollection.EMBER_MODAL_MESSAGE_ID);
+    }
+
+    static getMemberListContainer()
+    {
+        return document.getElementById(ElementCollection.MEMBER_LIST_CONTAINER_ID);
     }
 }
 
