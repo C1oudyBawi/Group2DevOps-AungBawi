@@ -39,5 +39,5 @@ export const respondWithNotFoundError = (res, error) =>
  */
 export const respondWithNotFoundErrors = (res, errors) =>
 {
-    res.status(StatusCodes.NOT_FOUND).json();
+    res.status(StatusCodes.NOT_FOUND).json(new ErrorDTO(errors));
 }
