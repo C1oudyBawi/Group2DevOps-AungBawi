@@ -12,10 +12,10 @@ const PORT = process.env.PORT || 5050;
 const START_PAGE = "index.html";
 
 const CORS_OPTIONS =
-    {
-        origin: true,
-        optionsSuccessStatus: 200
-    };
+{
+    origin: true,
+    optionsSuccessStatus: 200
+};
 
 app.use(cors(CORS_OPTIONS));
 
@@ -43,6 +43,6 @@ app.use("/api", ROUTER);
 
 export let server = app.listen(PORT, function () {
     const { address, port } = server.address();
-    const baseUrl = `http://${address == "::" ? "localhost" : address}:${port}`;
+    const baseUrl = `http://${address === "::" ? "localhost" : address}:${port}`;
     console.log(`Demo project at: ${baseUrl}`);
 });
