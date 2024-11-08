@@ -17,6 +17,7 @@ function replacer(key, value)
         return value;
     }
 }
+
 function reviver(key, value)
 {
     if (value !== null && typeof value === "object")
