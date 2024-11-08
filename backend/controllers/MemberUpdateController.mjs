@@ -1,7 +1,7 @@
 import { DB_INSTANCE } from "../database/JSONDatabase.mjs";
 import { MemberUpdateDTOSchema } from "../dtos/MemberDTO.mjs";
 import { GymProgramIsActiveDTOSchema } from "../dtos/GymProgramDTO.mjs";
-import {ZodError, ZodIssueCode, ZodUndefined} from "zod";
+import { ZodError, ZodIssueCode } from "zod";
 
 // TrumpMcDonaldz
 export const updateMemberAsync = async (req, res) =>
@@ -48,7 +48,7 @@ export const updateMemberAsync = async (req, res) =>
 
     let gymPrograms = body.gymPrograms;
 
-    if (gymPrograms !== undefined && Array.isArray(gymPrograms))
+    if (gymPrograms !== undefined)
     {
         for (let programName of gymPrograms)
         {
