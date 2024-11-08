@@ -42,7 +42,7 @@ export function createMember() {
             document.getElementById("gym_programs").value = "";
 
             // Redirect to home page or success page
-            window.location.href = 'index.html';
+            window.location.href = '../index.html';
         } else {
             document.getElementById("message").innerHTML = response.message || 'Unable to add member!';
             document.getElementById("message").setAttribute("class", "text-danger");
