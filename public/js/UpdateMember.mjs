@@ -360,7 +360,7 @@ const updateMemberAsync = async (modal, memberID) =>
         responseJSON;
 
         // TODO: Improve this to be specific to the input field.
-        modal.message = errorsToText(responseJSON.errors);
+        modal.errorMessage = errorsToText(responseJSON.errors);
 
         return;
     }
