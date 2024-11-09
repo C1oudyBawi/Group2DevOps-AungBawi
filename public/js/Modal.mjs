@@ -185,6 +185,7 @@ export class Modal
         {
             enableText = "show";
             this.clearInputValues();
+            this.clearMessage();
         }
 
         else
@@ -198,6 +199,11 @@ export class Modal
     clearInputValues()
     {
         this.formElement.reset();
+    }
+
+    clearMessage()
+    {
+        this.message = '';
     }
 
     get title()
