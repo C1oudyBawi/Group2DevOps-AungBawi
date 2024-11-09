@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import { ErrorIssueDTO } from "../../dtos/ErrorIssueDTO.mjs";
-import { ErrorDTO } from "../../dtos/ErrorDTO.mjs";
+import { ErrorIssueDTO } from "../../common/dtos/ErrorIssueDTO.mjs";
+import { ErrorDTO } from "../../common/dtos/ErrorDTO.mjs";
 // noinspection ES6UnusedImports
 import express from "express";
 // noinspection ES6UnusedImports

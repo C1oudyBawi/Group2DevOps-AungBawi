@@ -118,8 +118,12 @@ export class Modal
         const form = this.formElement = document.createElement("form");
         modalBodyElement.appendChild(form);
 
+        // Message
         const modalMessageElement = this.modalMessageElement = document.createElement('p');
-        modalMessageElement.className = "text-right";
+        modalMessageElement.className = "text-left";
+        // Treat \n as newline in HTML
+        // https://stackoverflow.com/questions/40877866/newline-character-in-bootstrap-modal-not-working
+        modalMessageElement.style.whiteSpace = "pre-line";
         form.appendChild(modalMessageElement);
 
         // Footer
@@ -150,9 +154,16 @@ export class Modal
      */
     addInput(input)
     {
+        const formElement = this.formElement;
+
+        const messageElement = this.modalMessageElement;
+
         const formGroupElement = document.createElement('div');
         formGroupElement.className = 'form-group';
-        this.formElement.appendChild(formGroupElement);
+        // Remove messageElement and re-add it to the end of the form
+        formElement.removeChild(messageElement);
+        formElement.appendChild(formGroupElement);
+        formElement.appendChild(messageElement);
 
         const labelElement = document.createElement('label');
         labelElement.textContent = input.label;
@@ -184,12 +195,13 @@ export class Modal
         if (enable)
         {
             enableText = "show";
-            this.clearInputValues();
         }
 
         else
         {
             enableText = "hide";
+            this.clearInputValues();
+            this.clearMessage();
         }
 
         $(this.modalElement).modal(enableText);
@@ -198,6 +210,11 @@ export class Modal
     clearInputValues()
     {
         this.formElement.reset();
+    }
+
+    clearMessage()
+    {
+        this.message = '';
     }
 
     get title()
@@ -217,7 +234,16 @@ export class Modal
 
     set message(value)
     {
-        this.modalMessageElement.textContent = value;
+        let messageElement = this.modalMessageElement;
+        messageElement.textContent = value;
+        messageElement.className = '';
+    }
+
+    set errorMessage(value)
+    {
+        let messageElement = this.modalMessageElement;
+        messageElement.textContent = value;
+        messageElement.className = "text-danger";
     }
 
     get actionButtonText()

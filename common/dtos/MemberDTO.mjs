@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { isAlpha } from "class-validator";
 
+// https://stackoverflow.com/questions/76354177/how-to-infer-zod-type-in-jsdoc-without-typescript
+/**
+ * @typedef { z.infer<typeof MemberDTOSchema> } MemberDTOSchemaType
+ */
 export const MemberDTOSchema = z.object(
 {
     name: z
@@ -65,9 +69,33 @@ export class MemberDTO
    */
   constructor({ snowflakeID, name, adminNumber, gymPrograms })
   {
-    this.id = `${snowflakeID}`;
+    if (snowflakeID !== undefined)
+    {
+        this.id = `${snowflakeID}`;
+    }
+
+    else
+    {
+        delete this.id;
+    }
+
     this.name = name;
     this.adminNumber = adminNumber;
     this.gymPrograms = gymPrograms;
+  }
+
+  /**
+   * @param { MemberDTOSchemaType } schema
+   * @returns { MemberDTO }
+   */
+  static fromSchema(schema)
+  {
+      return new MemberDTO(
+      {
+          snowflakeID: undefined,
+          name: schema.name,
+          adminNumber: schema.adminNumber,
+          gymPrograms: schema.gymPrograms
+      });
   }
 }

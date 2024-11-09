@@ -2,13 +2,44 @@ import { constructGET, constructPUT } from "./helpers/RequestHelpers.mjs";
 import { Endpoints } from "./Endpoints.mjs";
 import { ElementCollection } from "./ElementCollection.mjs";
 import { Modal, ModalInput } from "./Modal.mjs";
-import { MemberDTO } from "../../dtos/MemberDTO.mjs";
+import { MemberDTO, MemberDTOSchema } from "../../common/dtos/MemberDTO.mjs";
+import { z } from "zod";
+import { errorsToText } from "../../common/helpers/ErrorHelpers.mjs";
 
-/**
- * @type { UpdateModal }
- * @private
- */
-let updateMemberModal;
+class MemberCardElementChildren
+{
+    /**
+     * @type { string }
+     * @public
+     */
+    id;
+
+    /**
+     * @type { HTMLHeadingElement }
+     * @public
+     */
+    titleElement;
+
+    /**
+     * @type { HTMLParagraphElement }
+     * @public
+     */
+    adminNumberValueElement;
+
+    /**
+     * @type { HTMLUListElement | undefined }
+     * @public
+     */
+    gymProgramsValueElement;
+
+    constructor({ id, titleElement, adminNumberValueElement, gymProgramsValueElement })
+    {
+        this.id = id;
+        this.titleElement = titleElement;
+        this.adminNumberValueElement = adminNumberValueElement;
+        this.gymProgramsValueElement = gymProgramsValueElement;
+    }
+}
 
 class UpdateModal extends Modal
 {
@@ -97,10 +128,10 @@ class UpdateModal extends Modal
     }
 }
 
-const onLoad = async () =>
-{
-    updateMemberModal = new UpdateModal();
+const updateMemberModal = new UpdateModal();
 
+const onLoadAsync = async () =>
+{
     /**
      * @type { Response }
      */
@@ -154,6 +185,12 @@ const onLoad = async () =>
     memberListPaddedElement.classList.add("container");
     memberListElement.appendChild(memberListPaddedElement);
 
+    members.sort((left, right) =>
+        Number(
+            BigInt(right.id) - BigInt(left.id)
+        )
+    );
+
     for (const member of members)
     {
         // https://getbootstrap.com/docs/4.1/components/card/
@@ -181,7 +218,6 @@ const onLoad = async () =>
         const editButtonElement = document.createElement("button");
         editButtonElement.classList.add("btn", "btn-primary");
         editButtonElement.innerText = "Edit";
-        editButtonElement.onclick = () => showUpdateMemberModal(cardElement);
         cardHeaderElement.appendChild(editButtonElement);
 
         const cardBodyElement = document.createElement("div");
@@ -198,6 +234,8 @@ const onLoad = async () =>
         adminNumberValueElement.innerText = member.adminNumber;
         cardBodyElement.appendChild(adminNumberValueElement);
 
+        let gymProgramsValueElement;
+
         if (member.gymPrograms.length !== 0)
         {
             const gymProgramsTitleElement = document.createElement("h5");
@@ -205,27 +243,57 @@ const onLoad = async () =>
             gymProgramsTitleElement.innerText = "Gym Programs";
             cardBodyElement.appendChild(gymProgramsTitleElement);
 
-            const gymProgramsValueElement = document.createElement("ul");
+            gymProgramsValueElement = document.createElement("ul");
             gymProgramsValueElement.classList.add("list-group");
             cardBodyElement.appendChild(gymProgramsValueElement);
             gymProgramsValueElement.innerText = member.gymPrograms.join(", ");
         }
+
+        else
+        {
+            gymProgramsValueElement = undefined;
+        }
+
+        const memberCardElementChildren = new MemberCardElementChildren(
+        {
+            id: member.id,
+            titleElement: memberNameElement,
+            adminNumberValueElement: adminNumberValueElement,
+            gymProgramsValueElement: gymProgramsValueElement
+        });
+
+        editButtonElement.onclick = () => showUpdateMemberModal(memberCardElementChildren);
     }
 }
 
-document.addEventListener("DOMContentLoaded", onLoad);
+document.addEventListener("DOMContentLoaded", onLoadAsync);
 
 /**
- * @param { HTMLDivElement } memberCardElement
+ * @param { MemberCardElementChildren } memberCardElementChildren
  */
-const showUpdateMemberModal = (memberCardElement) =>
+const showUpdateMemberModal = (memberCardElementChildren) =>
 {
-    const memberID = memberCardElement.id;
+    const memberID = memberCardElementChildren.id;
+
+    updateMemberModal.name = memberCardElementChildren.titleElement.innerText;
+
+    updateMemberModal.adminNumber = memberCardElementChildren.adminNumberValueElement.innerText;
+
+    updateMemberModal.gymPrograms = memberCardElementChildren.gymProgramsValueElement?.innerText ?? "";
 
     updateMemberModal.actionButtonCallback = (modal) => updateMemberAsync(modal, memberID);
 
     updateMemberModal.show(true);
 }
+
+
+const updateMemberModalSchema = MemberDTOSchema.extend(
+{
+    gymPrograms: z
+        .string()
+        .transform(programs => programs.split(',').map(program => program.trim()))
+        .transform(programs => programs.length === 1 && programs[0] === '' ? [] : programs)
+});
 
 /**
  * @param { UpdateModal } modal
@@ -233,16 +301,32 @@ const showUpdateMemberModal = (memberCardElement) =>
  */
 const updateMemberAsync = async (modal, memberID) =>
 {
-    const undefinedIfDefault = (value) =>
+    // const name = undefinedIfDefault(modal.name);
+    // const adminNumber = undefinedIfDefault(modal.adminNumber);
+    // let gymPrograms = undefinedIfDefault(modal.gymPrograms);
+    //
+    // if (gymPrograms !== undefined)
+    // {
+    //     gymPrograms = gymPrograms.split(',').map(program => program.trim());
+    //
+    //     if (gymPrograms.length === 1 && gymPrograms[0] === TEXT_INPUT_DEFAULT_VALUE)
+    //     {
+    //         gymPrograms = [];
+    //     }
+    // }
+
+    const parseResult = await updateMemberModalSchema.safeParseAsync(
     {
-        const TEXT_INPUT_DEFAULT_VALUE = '';
+        name: modal.name,
+        adminNumber: modal.adminNumber,
+        gymPrograms: modal.gymPrograms
+    });
 
-        return value !== TEXT_INPUT_DEFAULT_VALUE ? value : undefined;
+    if (!parseResult.success)
+    {
+        modal.errorMessage = errorsToText(parseResult.error.errors);
+        return;
     }
-
-    const name = undefinedIfDefault(modal.name);
-    const adminNumber = undefinedIfDefault(modal.adminNumber);
-    const gymPrograms = undefinedIfDefault(modal.gymPrograms);
 
     /**
      * @type { Response }
@@ -255,14 +339,9 @@ const updateMemberAsync = async (modal, memberID) =>
         response = await fetch(
             `${Endpoints.MEMBER_UPDATE_ENDPOINT}/${memberID}`,
             constructPUT(
-                new MemberDTO(
-                    {
-                        name: name,
-                        adminNumber: adminNumber,
-                        gymPrograms: gymPrograms
-                    }
-                )
-            ));
+                MemberDTO.fromSchema(parseResult.data)
+            )
+        );
     }
 
     catch (error)
@@ -281,16 +360,12 @@ const updateMemberAsync = async (modal, memberID) =>
         responseJSON;
 
         // TODO: Improve this to be specific to the input field.
-        const errorsText = responseJSON.errors
-            .map(error => error.message)
-            .join('\n');
-
-        modal.message = errorsText;
+        modal.errorMessage = errorsToText(responseJSON.errors);
 
         return;
     }
 
     modal.show(false);
 
-    await onLoad();
+    await onLoadAsync();
 }
