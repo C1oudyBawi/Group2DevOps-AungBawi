@@ -33,14 +33,49 @@ export class GymProgramDTO
   name;
 
   /**
+ * @type { string }
+ * @public
+ */
+  focusBodyPart;
+
+  /**
+* @type { string }
+* @public
+*/
+  intensity;
+
+  /**
+ * @type { string }
+ * @public
+ */
+  difficulty;
+
+  /**
+* @type { string }
+* @public
+*/
+  targetAudience;
+
+  /**
+ * @type { number }
+ * @public
+ */
+  reps;
+
+  /**
    * @type { boolean }
    * @public
    */
   isActive;
 
-  constructor({ name, isActive })
+  constructor({ name, focusBodyPart, intensity, difficulty, targetAudience, reps, isActive })
   {
     this.name = name;
+    this.focusBodyPart = focusBodyPart;
+    this.intensity = intensity;
+    this.difficulty = difficulty;
+    this.targetAudience = targetAudience;
+    this.reps = reps;
     this.isActive = isActive;
   }
 }
