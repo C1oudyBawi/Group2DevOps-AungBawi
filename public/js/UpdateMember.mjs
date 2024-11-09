@@ -2,7 +2,8 @@ import { constructGET, constructPUT } from "./helpers/RequestHelpers.mjs";
 import { Endpoints } from "./Endpoints.mjs";
 import { ElementCollection } from "./ElementCollection.mjs";
 import { Modal, ModalInput } from "./Modal.mjs";
-import { MemberDTO } from "../../dtos/MemberDTO.mjs";
+import { MemberDTO, MemberDTOSchema } from "../../dtos/MemberDTO.mjs";
+import { z } from "zod";
 
 /**
  * @type { UpdateModal }
@@ -227,22 +228,49 @@ const showUpdateMemberModal = (memberCardElement) =>
     updateMemberModal.show(true);
 }
 
+
+const updateMemberModalSchema = MemberDTOSchema.extend(
+{
+    gymPrograms: z
+        .string()
+        .transform(programs => programs.split(',').map(program => program.trim()))
+        .transform(programs => programs.length === 1 && programs[0] === '' ? [] : programs)
+});
+
 /**
  * @param { UpdateModal } modal
  * @param { string } memberID
  */
 const updateMemberAsync = async (modal, memberID) =>
 {
-    const undefinedIfDefault = (value) =>
+    // const name = undefinedIfDefault(modal.name);
+    // const adminNumber = undefinedIfDefault(modal.adminNumber);
+    // let gymPrograms = undefinedIfDefault(modal.gymPrograms);
+    //
+    // if (gymPrograms !== undefined)
+    // {
+    //     gymPrograms = gymPrograms.split(',').map(program => program.trim());
+    //
+    //     if (gymPrograms.length === 1 && gymPrograms[0] === TEXT_INPUT_DEFAULT_VALUE)
+    //     {
+    //         gymPrograms = [];
+    //     }
+    // }
+
+    const parseResult = await updateMemberModalSchema.safeParseAsync(
     {
-        const TEXT_INPUT_DEFAULT_VALUE = '';
+        name: modal.name,
+        adminNumber: modal.adminNumber,
+        gymPrograms: modal.gymPrograms
+    });
 
-        return value !== TEXT_INPUT_DEFAULT_VALUE ? value : undefined;
+    if (!parseResult.success)
+    {
+        modal.errorMessage = parseResult.error.errors
+            .map(error => `[ ${error.path} ] ${error.message}`)
+            .join('\n');
+        return;
     }
-
-    const name = undefinedIfDefault(modal.name);
-    const adminNumber = undefinedIfDefault(modal.adminNumber);
-    const gymPrograms = undefinedIfDefault(modal.gymPrograms);
 
     /**
      * @type { Response }
@@ -255,14 +283,9 @@ const updateMemberAsync = async (modal, memberID) =>
         response = await fetch(
             `${Endpoints.MEMBER_UPDATE_ENDPOINT}/${memberID}`,
             constructPUT(
-                new MemberDTO(
-                    {
-                        name: name,
-                        adminNumber: adminNumber,
-                        gymPrograms: gymPrograms
-                    }
-                )
-            ));
+                MemberDTO.fromSchema(parseResult.data)
+            )
+        );
     }
 
     catch (error)
