@@ -4,13 +4,42 @@ import { ElementCollection } from "./ElementCollection.mjs";
 import { Modal, ModalInput } from "./Modal.mjs";
 import { MemberDTO, MemberDTOSchema } from "../../common/dtos/MemberDTO.mjs";
 import { z } from "zod";
-import { errorsToText } from "../../common/helpers/ErrorHelpers.js";
+import { errorsToText } from "../../common/helpers/ErrorHelpers.mjs";
 
-/**
- * @type { UpdateModal }
- * @private
- */
-let updateMemberModal;
+class MemberCardElementChildren
+{
+    /**
+     * @type { string }
+     * @public
+     */
+    id;
+
+    /**
+     * @type { HTMLHeadingElement }
+     * @public
+     */
+    titleElement;
+
+    /**
+     * @type { HTMLParagraphElement }
+     * @public
+     */
+    adminNumberValueElement;
+
+    /**
+     * @type { HTMLUListElement | undefined }
+     * @public
+     */
+    gymProgramsValueElement;
+
+    constructor({ id, titleElement, adminNumberValueElement, gymProgramsValueElement })
+    {
+        this.id = id;
+        this.titleElement = titleElement;
+        this.adminNumberValueElement = adminNumberValueElement;
+        this.gymProgramsValueElement = gymProgramsValueElement;
+    }
+}
 
 class UpdateModal extends Modal
 {
@@ -99,10 +128,10 @@ class UpdateModal extends Modal
     }
 }
 
+const updateMemberModal = new UpdateModal();
+
 const onLoadAsync = async () =>
 {
-    updateMemberModal = new UpdateModal();
-
     /**
      * @type { Response }
      */
@@ -183,7 +212,6 @@ const onLoadAsync = async () =>
         const editButtonElement = document.createElement("button");
         editButtonElement.classList.add("btn", "btn-primary");
         editButtonElement.innerText = "Edit";
-        editButtonElement.onclick = () => showUpdateMemberModal(cardElement);
         cardHeaderElement.appendChild(editButtonElement);
 
         const cardBodyElement = document.createElement("div");
@@ -200,6 +228,8 @@ const onLoadAsync = async () =>
         adminNumberValueElement.innerText = member.adminNumber;
         cardBodyElement.appendChild(adminNumberValueElement);
 
+        let gymProgramsValueElement;
+
         if (member.gymPrograms.length !== 0)
         {
             const gymProgramsTitleElement = document.createElement("h5");
@@ -207,22 +237,43 @@ const onLoadAsync = async () =>
             gymProgramsTitleElement.innerText = "Gym Programs";
             cardBodyElement.appendChild(gymProgramsTitleElement);
 
-            const gymProgramsValueElement = document.createElement("ul");
+            gymProgramsValueElement = document.createElement("ul");
             gymProgramsValueElement.classList.add("list-group");
             cardBodyElement.appendChild(gymProgramsValueElement);
             gymProgramsValueElement.innerText = member.gymPrograms.join(", ");
         }
+
+        else
+        {
+            gymProgramsValueElement = undefined;
+        }
+
+        const memberCardElementChildren = new MemberCardElementChildren(
+        {
+            id: member.id,
+            titleElement: memberNameElement,
+            adminNumberValueElement: adminNumberValueElement,
+            gymProgramsValueElement: gymProgramsValueElement
+        });
+
+        editButtonElement.onclick = () => showUpdateMemberModal(memberCardElementChildren);
     }
 }
 
 document.addEventListener("DOMContentLoaded", onLoadAsync);
 
 /**
- * @param { HTMLDivElement } memberCardElement
+ * @param { MemberCardElementChildren } memberCardElementChildren
  */
-const showUpdateMemberModal = (memberCardElement) =>
+const showUpdateMemberModal = (memberCardElementChildren) =>
 {
-    const memberID = memberCardElement.id;
+    const memberID = memberCardElementChildren.id;
+
+    updateMemberModal.name = memberCardElementChildren.titleElement.innerText;
+
+    updateMemberModal.adminNumber = memberCardElementChildren.adminNumberValueElement.innerText;
+
+    updateMemberModal.gymPrograms = memberCardElementChildren.gymProgramsValueElement?.innerText ?? "";
 
     updateMemberModal.actionButtonCallback = (modal) => updateMemberAsync(modal, memberID);
 
