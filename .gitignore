@@ -469,3 +469,6 @@ appsettings.json
 
 # Ignore JSON database
 database.json
+
+# Ignore dist directory
+/dist/

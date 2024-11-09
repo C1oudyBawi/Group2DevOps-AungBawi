@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { MEMBERS_ROUTER } from "./routes/MemberRoutes.mjs";
-import { GYM_PROGRAMS_ROUTER } from "./routes/GymProgramRoutes.mjs";
+import { MEMBERS_ROUTER } from "./utils/routes/MemberRoutes.mjs";
+import { GYM_PROGRAMS_ROUTER } from "./utils/routes/GymProgramRoutes.mjs";
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 import cors from "cors";
@@ -26,8 +26,7 @@ app.use(bodyParser.json());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-app.use(express.static(path.join(__dirname, "../public")));
-app.use("/dtos", express.static(path.join(__dirname, "../dtos")));
+app.use(express.static(path.join(__dirname, "/dist")));
 
 const ROUTER = express.Router();
 
@@ -37,7 +36,7 @@ ROUTER.use("/gym-programs", GYM_PROGRAMS_ROUTER);
 app.get("/", (req, res) =>
 {
     // https://stackoverflow.com/questions/14594121/express-res-sendfile-throwing-forbidden-error
-    res.sendFile(path.resolve(`${__dirname}/../public/${START_PAGE}`));
+    res.sendFile(path.resolve(`${__dirname}/public/${START_PAGE}`));
 });
 
 app.use("/api", ROUTER);

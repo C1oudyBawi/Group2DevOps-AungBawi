@@ -1,21 +1,36 @@
 // For modules ( .mjs ), we need to export the function
 
+import { ElementCollection } from "./ElementCollection.mjs";
+
 window.createMember = createMember;
 
 export function createMember() {
     let response = "";
 
+    let nameElement = ElementCollection.getMemberCreateModalNameField();
+    let adminNumberElement = ElementCollection.getMemberCreateModalAdminNumberField();
+    let gymProgramsElement = ElementCollection.getMemberCreateModalGymProgramsField();
+    let modalMessageElement = ElementCollection.getMemberCreateModalMessage();
+
+    // Assumes comma-separated list
+    let gymPrograms = gymProgramsElement.value.split(",").map(item => item.trim());
+
+    if (gymPrograms.length === 1 && gymPrograms[0] === "")
+    {
+        gymPrograms = [];
+    }
+
     // Collecting data from the form
     const jsonData = {
-        name: document.getElementById("name").value.trim(),
-        adminNumber: document.getElementById("admin_number").value.trim(),
-        gymPrograms: document.getElementById("gym_programs").value.split(",").map(item => item.trim()) // Assumes comma-separated list
+        name: nameElement.value.trim(),
+        adminNumber: adminNumberElement.value.trim(),
+        gymPrograms: gymPrograms
     };
 
     // Basic validation
     if (!jsonData.name || !jsonData.adminNumber) {
-        document.getElementById("message").innerHTML = 'All fields are required!';
-        document.getElementById("message").setAttribute("class", "text-danger");
+        modalMessageElement.innerHTML = 'All fields are required!';
+        modalMessageElement.setAttribute("class", "text-danger");
         return;
     }
 
@@ -33,25 +48,24 @@ export function createMember() {
         // Check for successful creation
         // TODO: Change backend to return 201 status code
         if (success){
-            document.getElementById("message").innerHTML = `Added Member: ${jsonData.name}!`;
-            document.getElementById("message").setAttribute("class", "text-success");
+            modalMessageElement.innerHTML = `Added Member: ${jsonData.name}!`;
+            modalMessageElement.setAttribute("class", "text-success");
 
             // Reset form fields
-            document.getElementById("name").value = "";
-            document.getElementById("admin_number").value = "";
-            document.getElementById("gym_programs").value = "";
+            nameElement.value = adminNumberElement.value = gymProgramsElement.value = '';
 
-            // Redirect to home page or success page
-            window.location.href = '../index.html';
+            // Refresh page to show new member
+            // TODO: Implement function for re-fetching members
+            window.location.reload();
         } else {
-            document.getElementById("message").innerHTML = response.message || 'Unable to add member!';
-            document.getElementById("message").setAttribute("class", "text-danger");
+            modalMessageElement.innerHTML = response.message || 'Unable to add member!';
+            modalMessageElement.setAttribute("class", "text-danger");
         }
     };
 
     request.onerror = function () {
-        document.getElementById("message").innerHTML = 'An error occurred!';
-        document.getElementById("message").setAttribute("class", "text-danger");
+        modalMessageElement.innerHTML = 'An error occurred!';
+        modalMessageElement.setAttribute("class", "text-danger");
     };
 
     // Sending JSON data to the backend

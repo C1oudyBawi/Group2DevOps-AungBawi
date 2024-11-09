@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { generateSnowflake } from "../utils/helpers/SnowflakeHelpers.mjs";
 import { isAlpha } from "class-validator";
 
 export const MemberDTOSchema = z.object(
@@ -58,9 +57,15 @@ export class MemberDTO
    */
   gymPrograms;
 
-  constructor({ name, adminNumber, gymPrograms })
+  /**
+   * @param { bigint } snowflakeID
+   * @param { string } name
+   * @param { string } adminNumber
+   * @param { GymProgramDTO[] } gymPrograms
+   */
+  constructor({ snowflakeID, name, adminNumber, gymPrograms })
   {
-    this.id = `${generateSnowflake()}`;
+    this.id = `${snowflakeID}`;
     this.name = name;
     this.adminNumber = adminNumber;
     this.gymPrograms = gymPrograms;
