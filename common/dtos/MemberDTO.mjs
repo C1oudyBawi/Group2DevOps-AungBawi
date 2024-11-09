@@ -69,7 +69,16 @@ export class MemberDTO
    */
   constructor({ snowflakeID, name, adminNumber, gymPrograms })
   {
-    this.id = `${snowflakeID}`;
+    if (snowflakeID !== undefined)
+    {
+        this.id = `${snowflakeID}`;
+    }
+
+    else
+    {
+        delete this.id;
+    }
+
     this.name = name;
     this.adminNumber = adminNumber;
     this.gymPrograms = gymPrograms;
