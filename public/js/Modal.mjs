@@ -234,7 +234,16 @@ export class Modal
 
     set message(value)
     {
-        this.modalMessageElement.textContent = value;
+        let messageElement = this.modalMessageElement;
+        messageElement.textContent = value;
+        messageElement.className = '';
+    }
+
+    set errorMessage(value)
+    {
+        let messageElement = this.modalMessageElement;
+        messageElement.textContent = value;
+        messageElement.className = "text-danger";
     }
 
     get actionButtonText()
