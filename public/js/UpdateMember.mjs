@@ -4,6 +4,7 @@ import { ElementCollection } from "./ElementCollection.mjs";
 import { Modal, ModalInput } from "./Modal.mjs";
 import { MemberDTO, MemberDTOSchema } from "../../common/dtos/MemberDTO.mjs";
 import { z } from "zod";
+import { errorsToText } from "../../common/helpers/ErrorHelpers.js";
 
 /**
  * @type { UpdateModal }
@@ -266,9 +267,7 @@ const updateMemberAsync = async (modal, memberID) =>
 
     if (!parseResult.success)
     {
-        modal.errorMessage = parseResult.error.errors
-            .map(error => `[ ${error.path} ] ${error.message}`)
-            .join('\n');
+        modal.errorMessage = errorsToText(parseResult.error.errors);
         return;
     }
 
@@ -304,11 +303,7 @@ const updateMemberAsync = async (modal, memberID) =>
         responseJSON;
 
         // TODO: Improve this to be specific to the input field.
-        const errorTexts = responseJSON.errors
-            .map(error => error.message)
-            .join('\n');
-
-        modal.message = errorTexts;
+        modal.message = errorsToText(responseJSON.errors);
 
         return;
     }
