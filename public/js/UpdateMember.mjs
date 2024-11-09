@@ -1,29 +1,154 @@
-import { constructGET } from "./helpers/RequestHelpers.mjs";
+import { constructGET, constructPUT } from "./helpers/RequestHelpers.mjs";
 import { Endpoints } from "./Endpoints.mjs";
 import { ElementCollection } from "./ElementCollection.mjs";
+import { Modal, ModalInput } from "./Modal.mjs";
+import { MemberDTO } from "../../dtos/MemberDTO.mjs";
+
+/**
+ * @type { UpdateModal }
+ * @private
+ */
+let updateMemberModal;
+
+class UpdateModal extends Modal
+{
+    /**
+     * @type { HTMLInputElement }
+     * @private
+     */
+    nameInputElement;
+
+    /**
+     * @type { HTMLInputElement }
+     * @private
+     */
+    adminNumberInputElement;
+
+    /**
+     * @type { HTMLInputElement }
+     * @private
+     */
+    gymProgramsInputElement;
+
+    constructor()
+    {
+        super();
+
+        this.title = "Update Member";
+
+        this.nameInputElement = this.addInput(
+            new ModalInput(
+                {
+                    label: "Name",
+                    placeholder: "Enter new name",
+                    required: false
+                })
+        ).valueElement;
+
+        this.adminNumberInputElement = this.addInput(
+            new ModalInput(
+                {
+                    label: "Admin Number",
+                    placeholder: "Enter new admin number",
+                    required: false
+                })
+        ).valueElement;
+
+        this.gymProgramsInputElement = this.addInput(
+            new ModalInput(
+                {
+                    label: "Gym Program(s)",
+                    placeholder: "Enter new gym program(s) ( Comma-separated )",
+                    required: false
+                })
+        ).valueElement;
+
+        this.actionButtonText = "Update Member!";
+    }
+
+    get name()
+    {
+        return this.nameInputElement.value;
+    }
+
+    set name(value)
+    {
+        this.nameInputElement.value = value;
+    }
+
+    get adminNumber()
+    {
+        return this.adminNumberInputElement.value;
+    }
+
+    set adminNumber(value)
+    {
+        this.adminNumberInputElement.value = value;
+    }
+
+    get gymPrograms()
+    {
+        return this.gymProgramsInputElement.value;
+    }
+
+    set gymPrograms(value)
+    {
+        this.gymProgramsInputElement.value = value;
+    }
+}
 
 const onLoad = async () =>
 {
-    const response = await fetch(
-        Endpoints.MEMBER_GET_ENDPOINT,
-        constructGET()
-    );
+    updateMemberModal = new UpdateModal();
+
+    /**
+     * @type { Response }
+     */
+    let response;
+
+    try
+    {
+        response = await fetch(
+            Endpoints.MEMBER_GET_ENDPOINT,
+            constructGET()
+        );
+    }
+
+    catch (error)
+    {
+        console.error(error);
+        response.ok = false;
+    }
 
     let memberListElement = ElementCollection.getMemberListContainer();
 
-    if (!response.ok)
-    {
-        memberListElement.innerText = "Failed to fetch members!";
-        return;
-    }
-
     // Clear the member list, we use this function for reloading as well.
     memberListElement.innerText = "";
+
+    const createCenteredHeading = (text) =>
+    {
+        const headingElement = document.createElement("h2");
+        headingElement.classList.add("text-center", "p-5");
+        headingElement.innerText = text;
+        return headingElement;
+    }
+
+    if (!response.ok)
+    {
+        memberListElement.appendChild(createCenteredHeading("Failed to fetch members!"));
+        return;
+    }
 
     /**
      * @type { MemberDTO[] }
      */
     const members = (await response.json()).members;
+
+    if (members.length === 0)
+    {
+        memberListElement.appendChild(createCenteredHeading("No members found!"));
+        return;
+    }
 
     const memberListPaddedElement = document.createElement("div");
     memberListPaddedElement.classList.add("container");
@@ -36,12 +161,28 @@ const onLoad = async () =>
         const cardElement = document.createElement("div");
         // mb-3 is for bottom margin
         cardElement.classList.add("card", "mb-3");
+        cardElement.id = member.id;
         memberListPaddedElement.appendChild(cardElement);
 
         const cardHeaderElement = document.createElement("div");
-        cardHeaderElement.classList.add("card-header");
-        cardHeaderElement.innerText = member.name;
+        cardHeaderElement.classList.add(
+            "card-header",
+            "d-flex",
+            "justify-content-between",
+            "align-items-center"
+        );
         cardElement.appendChild(cardHeaderElement);
+
+        const memberNameElement = document.createElement("h5");
+        memberNameElement.classList.add("card-title", "m-0");
+        memberNameElement.innerText = member.name;
+        cardHeaderElement.appendChild(memberNameElement);
+
+        const editButtonElement = document.createElement("button");
+        editButtonElement.classList.add("btn", "btn-primary");
+        editButtonElement.innerText = "Edit";
+        editButtonElement.onclick = () => showUpdateMemberModal(cardElement);
+        cardHeaderElement.appendChild(editButtonElement);
 
         const cardBodyElement = document.createElement("div");
         cardBodyElement.classList.add("card-body");
@@ -74,10 +215,82 @@ const onLoad = async () =>
 
 document.addEventListener("DOMContentLoaded", onLoad);
 
-const updateMember = () =>
+/**
+ * @param { HTMLDivElement } memberCardElement
+ */
+const showUpdateMemberModal = (memberCardElement) =>
 {
+    const memberID = memberCardElement.id;
 
+    updateMemberModal.actionButtonCallback = (modal) => updateMemberAsync(modal, memberID);
+
+    updateMemberModal.show(true);
 }
 
-// For modules ( .mjs ), we need to export the function
-window.updateMember = updateMember;
+/**
+ * @param { UpdateModal } modal
+ * @param { string } memberID
+ */
+const updateMemberAsync = async (modal, memberID) =>
+{
+    const undefinedIfDefault = (value) =>
+    {
+        const TEXT_INPUT_DEFAULT_VALUE = '';
+
+        return value !== TEXT_INPUT_DEFAULT_VALUE ? value : undefined;
+    }
+
+    const name = undefinedIfDefault(modal.name);
+    const adminNumber = undefinedIfDefault(modal.adminNumber);
+    const gymPrograms = undefinedIfDefault(modal.gymPrograms);
+
+    /**
+     * @type { Response }
+     */
+
+    let response;
+
+    try
+    {
+        response = await fetch(
+            `${Endpoints.MEMBER_UPDATE_ENDPOINT}/${memberID}`,
+            constructPUT(
+                new MemberDTO(
+                    {
+                        name: name,
+                        adminNumber: adminNumber,
+                        gymPrograms: gymPrograms
+                    }
+                )
+            ));
+    }
+
+    catch (error)
+    {
+        console.error(error);
+        response.ok = false;
+    }
+
+    const responseJSON = await response.json();
+
+    if (!response.ok)
+    {
+        /**
+         * @type { ErrorDTO }
+         */
+        responseJSON;
+
+        // TODO: Improve this to be specific to the input field.
+        const errorsText = responseJSON.errors
+            .map(error => error.message)
+            .join('\n');
+
+        modal.message = errorsText;
+
+        return;
+    }
+
+    modal.show(false);
+
+    await onLoad();
+}
