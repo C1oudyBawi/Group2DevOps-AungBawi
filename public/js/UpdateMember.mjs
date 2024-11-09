@@ -185,6 +185,12 @@ const onLoadAsync = async () =>
     memberListPaddedElement.classList.add("container");
     memberListElement.appendChild(memberListPaddedElement);
 
+    members.sort((left, right) =>
+        Number(
+            BigInt(right.id) - BigInt(left.id)
+        )
+    );
+
     for (const member of members)
     {
         // https://getbootstrap.com/docs/4.1/components/card/
