@@ -46,7 +46,7 @@ export const createMemberAsync = async(req, res) =>
 
         let member = new MemberDTO(
         {
-            id: generateSnowflake(),
+            snowflakeID: generateSnowflake(),
             name: name,
             adminNumber: adminNumber,
             gymPrograms: Array.from(gymPrograms),
