@@ -99,7 +99,7 @@ class UpdateModal extends Modal
     }
 }
 
-const onLoad = async () =>
+const onLoadAsync = async () =>
 {
     updateMemberModal = new UpdateModal();
 
@@ -215,7 +215,7 @@ const onLoad = async () =>
     }
 }
 
-document.addEventListener("DOMContentLoaded", onLoad);
+document.addEventListener("DOMContentLoaded", onLoadAsync);
 
 /**
  * @param { HTMLDivElement } memberCardElement
@@ -310,5 +310,5 @@ const updateMemberAsync = async (modal, memberID) =>
 
     modal.show(false);
 
-    await onLoad();
+    await onLoadAsync();
 }
