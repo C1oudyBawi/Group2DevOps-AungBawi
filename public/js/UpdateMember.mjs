@@ -2,7 +2,7 @@ import { constructGET, constructPUT } from "./helpers/RequestHelpers.mjs";
 import { Endpoints } from "./Endpoints.mjs";
 import { ElementCollection } from "./ElementCollection.mjs";
 import { Modal, ModalInput } from "./Modal.mjs";
-import { MemberDTO, MemberDTOSchema } from "../../dtos/MemberDTO.mjs";
+import { MemberDTO, MemberDTOSchema } from "../../common/dtos/MemberDTO.mjs";
 import { z } from "zod";
 
 /**

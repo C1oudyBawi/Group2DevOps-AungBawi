@@ -1,6 +1,6 @@
 // Aung
 import { DB_INSTANCE } from "../database/JSONDatabase.mjs";
-import { GymProgramDTO } from "../../dtos/GymProgramDTO.mjs";
+import { GymProgramDTO } from "../../common/dtos/GymProgramDTO.mjs";
 
 export const createProgram = async (req, res) => {
     const programData = req.body;
