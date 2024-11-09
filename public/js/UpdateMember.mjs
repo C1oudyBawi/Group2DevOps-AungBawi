@@ -281,11 +281,11 @@ const updateMemberAsync = async (modal, memberID) =>
         responseJSON;
 
         // TODO: Improve this to be specific to the input field.
-        const errorsText = responseJSON.errors
+        const errorTexts = responseJSON.errors
             .map(error => error.message)
             .join('\n');
 
-        modal.message = errorsText;
+        modal.message = errorTexts;
 
         return;
     }
