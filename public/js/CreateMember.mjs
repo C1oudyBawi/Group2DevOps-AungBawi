@@ -7,10 +7,10 @@ window.createMember = createMember;
 export function createMember() {
     let response = "";
 
-    let nameElement = ElementCollection.getMemberModalNameField();
-    let adminNumberElement = ElementCollection.getMemberModalAdminNumberField();
-    let gymProgramsElement = ElementCollection.getMemberModalGymProgramsField();
-    let modalMessageElement = ElementCollection.getMemberModalMessage();
+    let nameElement = ElementCollection.getMemberCreateModalNameField();
+    let adminNumberElement = ElementCollection.getMemberCreateModalAdminNumberField();
+    let gymProgramsElement = ElementCollection.getMemberCreateModalGymProgramsField();
+    let modalMessageElement = ElementCollection.getMemberCreateModalMessage();
 
     // Assumes comma-separated list
     let gymPrograms = gymProgramsElement.value.split(",").map(item => item.trim());

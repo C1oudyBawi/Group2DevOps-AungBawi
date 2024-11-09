@@ -25,7 +25,7 @@
         </div>
 
         <div class="row justify-content-center p-3">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#member-modal">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#member-create-modal">
                 Create Member
             </button>
         </div>
@@ -34,18 +34,18 @@
     <!-- Member List -->
     <div id="member-list-container"></div>
 
-    <!-- Modal -->
-    <div id="member-modal"
+    <!-- Create Modal -->
+    <div id="member-create-modal"
          class="modal fade"
          tabindex="-1"
          role="dialog"
-         aria-labelledby="member-modal-label"
+         aria-labelledby="member-create-modal-label"
          aria-hidden="true"
     >
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="member-modal-label">Add New Member</h5>
+                    <h5 class="modal-title" id="member-create-modal-label">Add New Member</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -53,18 +53,18 @@
                 <div class="modal-body">
                     <form id="memberForm">
                         <div class="form-group">
-                            <label for="member-modal-name">Name</label>
-                            <input type="text" class="form-control" id="member-modal-name" placeholder="Enter your name" required>
+                            <label for="member-create-modal-name">Name</label>
+                            <input type="text" class="form-control" id="member-create-modal-name" placeholder="Enter your name" required>
                         </div>
                         <div class="form-group">
-                            <label for="member-modal-admin-number">Admin Number</label>
-                            <input type="text" class="form-control" id="member-modal-admin-number" placeholder="Enter your Admin Number" required>
+                            <label for="member-create-modal-admin-number">Admin Number</label>
+                            <input type="text" class="form-control" id="member-create-modal-admin-number" placeholder="Enter your Admin Number" required>
                         </div>
                         <div class="form-group">
-                            <label for="member-modal-gym-programs">Gym Programs</label>
-                            <input type="text" class="form-control" id="member-modal-gym-programs" placeholder="Enter gym programs (comma-separated)">
+                            <label for="member-create-modal-gym-programs">Gym Programs</label>
+                            <input type="text" class="form-control" id="member-create-modal-gym-programs" placeholder="Enter gym programs (comma-separated)">
                         </div>
-                        <p id="member-modal-message" class="text-right"></p>
+                        <p id="member-create-modal-message" class="text-right"></p>
                     </form>
                 </div>
                 <div class="modal-footer">
