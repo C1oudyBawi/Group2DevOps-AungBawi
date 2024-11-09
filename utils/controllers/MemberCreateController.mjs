@@ -1,5 +1,6 @@
 import { DB_INSTANCE } from "../database/JSONDatabase.mjs";
 import { MemberDTO } from "../../dtos/MemberDTO.mjs";
+import { generateSnowflake } from "../helpers/SnowflakeHelpers.mjs";
 
 export const createMemberAsync = async(req, res) =>
 {
@@ -45,6 +46,7 @@ export const createMemberAsync = async(req, res) =>
 
         let member = new MemberDTO(
         {
+            id: generateSnowflake(),
             name: name,
             adminNumber: adminNumber,
             gymPrograms: Array.from(gymPrograms),
