@@ -195,13 +195,13 @@ export class Modal
         if (enable)
         {
             enableText = "show";
-            this.clearInputValues();
-            this.clearMessage();
         }
 
         else
         {
             enableText = "hide";
+            this.clearInputValues();
+            this.clearMessage();
         }
 
         $(this.modalElement).modal(enableText);
