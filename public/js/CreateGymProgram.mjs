@@ -67,6 +67,7 @@ async function submitForm(event) {
 	event.preventDefault();
 	const formData = Object.fromEntries(new FormData(event.target).entries());
 	formData.reps = parseInt(formData.reps, 10);
+	formData.id = crypto.randomUUID(); // Generate a unique ID for the new program
 
 	try {
 		const response = await fetch(
@@ -87,7 +88,7 @@ async function submitForm(event) {
 			const errorData = await response.json();
 			alert(
 				"Error creating program: " +
-					(errorData.erros
+					(errorData.errors
 						? errorData.errors.join(", ")
 						: "Unknown error!")
 			);

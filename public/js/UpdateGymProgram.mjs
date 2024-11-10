@@ -7,7 +7,7 @@ export function openUpdateModal(programId) {
 	loadProgramData(programId);
 }
 
-async function loadProgramData(programId) {
+const loadProgramData = async (programId) => {
 	try {
 		const response = await fetch(
 			`http://localhost:5050/api/gym-programs/${programId}`
@@ -30,9 +30,9 @@ async function loadProgramData(programId) {
 	} catch (error) {
 		console.error("Error loading program data:", error);
 	}
-}
+};
 
-async function submitUpdateForm(event) {
+const submitUpdateForm = async (event) => {
 	event.preventDefault();
 	const formData = Object.fromEntries(new FormData(event.target).entries());
 	formData.reps = parseInt(formData.reps, 10);
@@ -65,63 +65,29 @@ async function submitUpdateForm(event) {
 		alert("Failed to connect to the server.");
 		console.error("Error submitting update form: ", error);
 	}
-}
+};
 
-async function submitForm(event) {
-	event.preventDefault();
-	const formData = Object.fromEntries(new FormData(event.target).entries());
-	formData.reps = parseInt(formData.reps, 10);
-
-	try {
-		const response = await fetch(
-			"http://localhost:5050/api/gym-programs/create",
-			{
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(formData),
-			}
-		);
-
-		if (response.ok) {
-			alert(`Program: [${formData.name}] has been created successfully!`);
-			event.target.reset();
-			closeModal(document.getElementById("programModal"));
-			await displayPrograms();
-		} else {
-			const errorData = await response.json();
-			alert(
-				"Error creating program: " +
-					(errorData.erros
-						? errorData.errors.join(", ")
-						: "Unknown error!")
-			);
-		}
-	} catch (error) {
-		alert("Failed to connect to the server.");
-		console.error("Error submitting form: ", error);
-	}
-}
-
-function startProgramHandlers() {
+const startProgramHandlers = () => {
 	const modal = document.getElementById("updateProgramModal");
 	const closeModalButton = document.getElementById("closeModalButton");
 	const programForm = document.getElementById("programForm");
 
 	closeModalButton.addEventListener("click", () => closeModal(modal));
-	programForm.addEventListener("submit", submitForm);
+	programForm.addEventListener("submit", submitUpdateForm);
 
 	const closeUpdateModalButton = document.getElementById(
 		"closeUpdateModalButton"
 	);
 
-	closeUpdateModalButton.addEventListener("click", () =>
-		closeModal(updateModal)
+	closeUpdateModalButton.addEventListener(
+		"click",
+		() => (updateModal.style.display = "none")
 	);
 
 	const updateProgramForm = document.getElementById("updateProgramForm");
 	updateProgramForm.addEventListener("submit", submitUpdateForm);
 
 	displayPrograms();
-}
+};
 
 startProgramHandlers();

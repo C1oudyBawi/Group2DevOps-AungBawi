@@ -1,5 +1,2 @@
 // Ohk
-export const updateProgram = (req, res) =>
-{
-
-}
+export const updateProgram = (req, res) => {};
