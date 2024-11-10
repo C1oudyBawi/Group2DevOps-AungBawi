@@ -10,8 +10,7 @@ export const getProgramsAsync = async (req, res) => {
 };
 
 export const getOneProgramsAsync = async (req, res) => {
-	let program = DB_INSTANCE.programs
-		.values()
+	let program = Array.from(DB_INSTANCE.programs.values())
 		.find((program) => program.id === req.params.id);
 
 	if (program === undefined) {
