@@ -137,18 +137,22 @@ const onLoadAsync = async () =>
      */
     let response;
 
+    let isOk;
+
     try
     {
         response = await fetch(
             Endpoints.MEMBER_GET_ENDPOINT,
             constructGET()
         );
+
+        isOk = response.ok;
     }
 
     catch (error)
     {
         console.error(error);
-        response.ok = false;
+        isOk = false;
     }
 
     let memberListElement = ElementCollection.getMemberListContainer();
@@ -164,7 +168,7 @@ const onLoadAsync = async () =>
         return headingElement;
     }
 
-    if (!response.ok)
+    if (!isOk)
     {
         memberListElement.appendChild(createCenteredHeading("Failed to fetch members!"));
         return;
@@ -334,6 +338,8 @@ const updateMemberAsync = async (modal, memberID) =>
 
     let response;
 
+    let isOk;
+
     try
     {
         response = await fetch(
@@ -342,17 +348,19 @@ const updateMemberAsync = async (modal, memberID) =>
                 MemberDTO.fromSchema(parseResult.data)
             )
         );
+
+        isOk = response.ok;
     }
 
     catch (error)
     {
         console.error(error);
-        response.ok = false;
+        isOk = false;
     }
 
     const responseJSON = await response.json();
 
-    if (!response.ok)
+    if (!isOk)
     {
         /**
          * @type { ErrorDTO }
