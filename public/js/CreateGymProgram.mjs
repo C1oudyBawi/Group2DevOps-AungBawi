@@ -1,3 +1,5 @@
+import { openUpdateModal } from "./UpdateGymProgram.mjs";
+
 function openModal(modal) {
 	modal.style.display = "block";
 }
@@ -6,7 +8,7 @@ function closeModal(modal) {
 	modal.style.display = "none";
 }
 
-async function displayPrograms() {
+export async function displayPrograms() {
 	try {
 		const response = await fetch("http://localhost:5050/api/gym-programs");
 		if (!response.ok) {
@@ -42,10 +44,20 @@ async function displayPrograms() {
                 <p>Target Audience: ${program.targetAudience}</p>
                 <p>Repetitions: ${program.reps}</p>
                 <p>Status: ${program.isActive ? "Active" : "Inactive"}</p>
+				<button class="btn btn-secondary btn-sm update-button" data-id="${
+					program.id
+				}">Update</button>
             `;
 			gridContainer.appendChild(programDiv);
 		});
 		programListDiv.appendChild(gridContainer);
+
+		document.querySelectorAll(".update-button").forEach((button) => {
+			button.addEventListener("click", (event) => {
+				const programId = event.target.getAttribute("data-id");
+				openUpdateModal(programId);
+			});
+		});
 	} catch (error) {
 		console.error("Error displaying programs:", error);
 	}
