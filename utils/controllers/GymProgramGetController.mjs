@@ -9,7 +9,7 @@ export const getProgramsAsync = async (req, res) => {
 	res.json(programs);
 };
 
-export const getOneProgramsAsync = async (req, res) => {
+export const getOneProgramAsync = async (req, res) => {
 	let program = Array.from(DB_INSTANCE.programs.values())
 		.find((program) => program.id === req.params.id);
 
