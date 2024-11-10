@@ -52,7 +52,7 @@ export const createMemberAsync = async(req, res) =>
 
         let generatedID = member.id;
 
-        database.members.set(generatedID, member);
+        database.tryCreateMember(member);
 
         await database.updateAsync();
 
