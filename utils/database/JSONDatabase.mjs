@@ -92,6 +92,30 @@ export class JSONDatabase
     }
 
     /**
+     * @param { string } id
+     */
+    getGymProgramByID = (id) =>
+    {
+        return this.programs.get(id) ?? null;
+    }
+
+    /**
+     * @param { string } name
+     */
+    getGymProgramByName = (name) =>
+    {
+        for (let program of this.programs.values())
+        {
+            if (program.name.toLowerCase() === name.toLowerCase())
+            {
+                return program;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @returns { Promise }
      */
     updateAsync = () =>
