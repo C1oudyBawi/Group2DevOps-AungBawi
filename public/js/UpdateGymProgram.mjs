@@ -91,4 +91,4 @@ const startProgramHandlers = async () => {
 	await displayPrograms();
 };
 
-await startProgramHandlers();
+startProgramHandlers();

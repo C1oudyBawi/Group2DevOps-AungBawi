@@ -4,7 +4,7 @@ function openModal(modal) {
 	modal.style.display = "block";
 }
 
-function closeModal(modal) {
+export function closeModal(modal) {
 	modal.style.display = "none";
 }
 
