@@ -18,7 +18,6 @@ export async function displayPrograms() {
 
 		const programs = await response.json();
 		const programArray = programs.programs;
-		console.log(programs);
 		const programListDiv = document.getElementById("programList");
 		programListDiv.innerHTML = "<h2>Current Programs</h2>";
 

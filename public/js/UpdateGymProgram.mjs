@@ -1,6 +1,6 @@
 import { closeModal, displayPrograms } from "./CreateGymProgram.mjs";
 import { Endpoints } from "./Endpoints.mjs";
-import { constructPOST } from "./helpers/RequestHelpers.mjs";
+import { constructPUT } from "./helpers/RequestHelpers.mjs";
 import { GymProgramDTO } from "../../common/dtos/GymProgramDTO.mjs";
 import { plainToClass } from "class-transformer";
 
@@ -39,13 +39,16 @@ const loadProgramData = async (programId) => {
 const submitUpdateForm = async (event) => {
 	event.preventDefault();
 
-	const formData = plainToClass(GymProgramDTO, Object.fromEntries(new FormData(event.target).entries()));
+	const formData = plainToClass(
+		GymProgramDTO,
+		Object.fromEntries(new FormData(event.target).entries())
+	);
 	formData.reps = parseInt(formData.reps, 10);
 
 	try {
 		const response = await fetch(
 			`${Endpoints.GYM_PROGRAM_UPDATE_ENDPOINT}/${formData.id}`,
-			constructPOST(formData)
+			constructPUT(formData)
 		);
 
 		if (response.ok) {

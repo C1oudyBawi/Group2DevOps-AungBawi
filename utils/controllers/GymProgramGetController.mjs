@@ -14,8 +14,6 @@ export const getOneProgramsAsync = async (req, res) => {
 		.values()
 		.find((program) => program.id === req.params.id);
 
-	console.log(program);
-
 	if (program === undefined) {
 		res.status(404).send("Program not found.");
 		return;
