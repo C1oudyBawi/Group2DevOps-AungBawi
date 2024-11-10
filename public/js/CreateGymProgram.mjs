@@ -19,37 +19,44 @@ export async function displayPrograms() {
 		const programs = await response.json();
 		const programArray = programs.programs;
 		const programListDiv = document.getElementById("programList");
-		programListDiv.innerHTML = "<h2>Current Programs</h2>";
+		programListDiv.innerHTML = ""; // Clear any existing content
 
-		const gridContainer = document.createElement("div");
-		gridContainer.style.display = "grid";
-		gridContainer.style.gridTemplateColumns =
-			"repeat(auto-fit, minmax(150px, max-content))";
-		gridContainer.style.gap = "5px";
+		const rowDiv = document.createElement("div");
+		rowDiv.className = "row";
 
 		programArray.map((program) => {
-			const programDiv = document.createElement("div");
-			programDiv.style.border = "1px solid #ccc";
-			programDiv.style.padding = "8px";
-			programDiv.style.borderRadius = "5px";
-			programDiv.style.backgroundColor = "#f9f9f9";
-			programDiv.style.width = "300px";
+			const colDiv = document.createElement("div");
+			colDiv.className = "col-md-4 mb-4";
+
+			const cardDiv = document.createElement("div");
+			cardDiv.className = "card h-100";
+
+			const cardBodyDiv = document.createElement("div");
+			cardBodyDiv.className = "card-body";
+
 			let programName = program.name.toUpperCase();
-			programDiv.innerHTML = `
-                <h3>${programName}</h3>
-                <p>Focus: ${program.focusBodyPart}</p>
-                <p>Difficulty: ${program.difficulty}</p>
-                <p>Intensity: ${program.intensity}</p>
-                <p>Target Audience: ${program.targetAudience}</p>
-                <p>Repetitions: ${program.reps}</p>
-                <p>Status: ${program.isActive ? "Active" : "Inactive"}</p>
+			cardBodyDiv.innerHTML = `
+                <h5 class="card-title">${programName}</h5>
+                <p class="card-text">Focus: ${program.focusBodyPart}</p>
+                <p class="card-text">Difficulty: ${program.difficulty}</p>
+                <p class="card-text">Intensity: ${program.intensity}</p>
+                <p class="card-text">Target Audience: ${
+					program.targetAudience
+				}</p>
+                <p class="card-text">Repetitions: ${program.reps}</p>
+                <p class="card-text">Status: ${
+					program.isActive ? "Active" : "Inactive"
+				}</p>
 				<button class="btn btn-secondary btn-sm update-button" data-id="${
 					program.id
 				}">Update</button>
             `;
-			gridContainer.appendChild(programDiv);
+
+			cardDiv.appendChild(cardBodyDiv);
+			colDiv.appendChild(cardDiv);
+			rowDiv.appendChild(colDiv);
 		});
-		programListDiv.appendChild(gridContainer);
+		programListDiv.appendChild(rowDiv);
 
 		document.querySelectorAll(".update-button").forEach((button) => {
 			button.addEventListener("click", (event) => {
