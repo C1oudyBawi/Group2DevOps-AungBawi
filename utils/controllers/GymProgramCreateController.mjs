@@ -96,19 +96,18 @@ export const createProgram = async (req, res) => {
 		return res.status(400).json({ errors });
 	}
 
-	// Create and save the program
-	const newProgram = new GymProgramDTO({
-		id: generateSnowflake(),
-		name,
-		focusBodyPart,
-		intensity,
-		difficulty,
-		targetAudience,
-		reps,
-		isActive,
-	});
+	const newProgram = database.tryCreateGymProgram(
+		new GymProgramDTO({
+			id: generateSnowflake(),
+			name,
+			focusBodyPart,
+			intensity,
+			difficulty,
+			targetAudience,
+			reps,
+			isActive,
+	}));
 
-	existingPrograms.set(newProgram.id, newProgram);
 	await database.updateAsync();
 
 	// Return the newly created program
