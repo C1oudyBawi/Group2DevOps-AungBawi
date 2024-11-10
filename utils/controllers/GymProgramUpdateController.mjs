@@ -4,7 +4,6 @@ import { GymProgramDTO } from "../../common/dtos/GymProgramDTO.mjs";
 // Ohk
 export const updateProgram = async (req, res) => {
 	const programId = req.params.id;
-	console.log(programId);
 	const programData = req.body;
 	const errors = [];
 

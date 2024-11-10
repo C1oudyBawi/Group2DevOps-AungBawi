@@ -23,7 +23,7 @@ export const GymProgramIsActiveDTOSchema = GymProgramDTOSchema.extend({
 
 export class GymProgramDTO {
 	/**
-	 * @type { string }
+	 * @type { string | undefined }
 	 * @public
 	 */
 	id;
@@ -79,8 +79,13 @@ export class GymProgramDTO {
 		targetAudience,
 		reps,
 		isActive,
-	}) {
-		this.id = id;
+	}){
+		if (id !== undefined) {
+			this.id = `${id}`;
+		}
+		else {
+			delete this.id;
+		}
 		this.name = name;
 		this.focusBodyPart = focusBodyPart;
 		this.intensity = intensity;

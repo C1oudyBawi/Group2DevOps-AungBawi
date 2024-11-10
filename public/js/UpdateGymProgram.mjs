@@ -21,6 +21,10 @@ const loadProgramData = async (programId) => {
 			return;
 		}
 
+		const updateProgramForm = document.getElementById("updateProgramForm");
+		updateProgramForm.attributes["data-id"] = programId;
+
+
 		const program = await response.json();
 		document.getElementById("updateName").value = program.name;
 		document.getElementById("updateFocusBodyPart").value =
@@ -36,23 +40,37 @@ const loadProgramData = async (programId) => {
 	}
 };
 
+/**
+ * @param { SubmitEvent } event
+ */
 const submitUpdateForm = async (event) => {
 	event.preventDefault();
 
-	const formData = plainToClass(
-		GymProgramDTO,
-		Object.fromEntries(new FormData(event.target).entries())
-	);
-	formData.reps = parseInt(formData.reps, 10);
+	const target = event.target;
+
+	let formData = new FormData(target);
+
+	formData = Object.fromEntries(formData.entries());
+
+	const updatedProgram = new GymProgramDTO({
+		id: formData.id,
+		name: formData.name,
+		focusBodyPart: formData.focusBodyPart,
+		intensity: formData.intensity,
+		difficulty: formData.difficulty,
+		targetAudience: formData.targetAudience,
+		reps: parseInt(formData.reps, 10),
+		isActive: true, // TODO: Add frontend support for this
+	});
 
 	try {
 		const response = await fetch(
-			`${Endpoints.GYM_PROGRAM_UPDATE_ENDPOINT}/${formData.id}`,
-			constructPUT(formData)
+			`${Endpoints.GYM_PROGRAM_UPDATE_ENDPOINT}/${updatedProgram.id}`,
+			constructPUT(updatedProgram)
 		);
 
 		if (response.ok) {
-			alert(`Program: [${formData.name}] has been updated successfully!`);
+			alert(`Program: [${updatedProgram.name}] has been updated successfully!`);
 			event.target.reset();
 			closeModal(document.getElementById("updateProgramModal"));
 			await displayPrograms();
@@ -77,7 +95,6 @@ const startProgramHandlers = async () => {
 	const programForm = document.getElementById("programForm");
 
 	closeModalButton.addEventListener("click", () => closeModal(modal));
-	programForm.addEventListener("submit", submitUpdateForm);
 
 	const closeUpdateModalButton = document.getElementById(
 		"closeUpdateModalButton"

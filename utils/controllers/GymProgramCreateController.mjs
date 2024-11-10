@@ -1,13 +1,13 @@
 // Aung Bawi Lian
 import { DB_INSTANCE } from "../database/JSONDatabase.mjs";
 import { GymProgramDTO } from "../../common/dtos/GymProgramDTO.mjs";
+import { generateSnowflake } from "../helpers/SnowflakeHelpers.mjs";
 
 export const createProgram = async (req, res) => {
 	const programData = req.body;
 	const errors = [];
 
 	let {
-		id,
 		name,
 		focusBodyPart,
 		intensity,
@@ -98,7 +98,7 @@ export const createProgram = async (req, res) => {
 
 	// Create and save the program
 	const newProgram = new GymProgramDTO({
-		id,
+		id: generateSnowflake(),
 		name,
 		focusBodyPart,
 		intensity,
@@ -108,7 +108,7 @@ export const createProgram = async (req, res) => {
 		isActive,
 	});
 
-	existingPrograms.set(name, newProgram);
+	existingPrograms.set(newProgram.id, newProgram);
 	await database.updateAsync();
 
 	// Return the newly created program
