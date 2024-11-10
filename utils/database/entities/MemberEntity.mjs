@@ -20,7 +20,7 @@ export class MemberEntity extends MemberDTO
      */
     static fromDTO(dto, dbInstance)
     {
-        const entity = plainToClass(MemberEntity, classToPlain(dto));
+        const entity = plainToClass2(MemberEntity, classToPlain(dto));
         entity.gymProgramIDs = entity.gymPrograms.map(
             programName => dbInstance.tryGetGymProgramByName(programName).id
         );

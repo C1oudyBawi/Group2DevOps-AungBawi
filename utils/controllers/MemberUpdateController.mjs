@@ -62,7 +62,7 @@ export const updateMemberAsync = async (req, res) =>
         {
             let targetProgram = database.tryGetGymProgramByName(programName);
 
-            if (targetProgram === undefined)
+            if (targetProgram === null)
             {
                 respondWithBadRequestError(
                     res,
