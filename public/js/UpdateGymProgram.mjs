@@ -1,16 +1,20 @@
-import { displayPrograms } from "./CreateGymProgram.mjs";
+import { closeModal, displayPrograms } from "./CreateGymProgram.mjs";
+import { Endpoints } from "./Endpoints.mjs";
+import { constructPOST } from "./helpers/RequestHelpers.mjs";
+import { GymProgramDTO } from "../../common/dtos/GymProgramDTO.mjs";
+import { plainToClass } from "class-transformer";
 
 const updateModal = document.getElementById("updateProgramModal");
 
-export function openUpdateModal(programId) {
+export async function openUpdateModal(programId) {
 	updateModal.style.display = "block";
-	loadProgramData(programId);
+	await loadProgramData(programId);
 }
 
 const loadProgramData = async (programId) => {
 	try {
 		const response = await fetch(
-			`http://localhost:5050/api/gym-programs/${programId}`
+			`${Endpoints.GYM_PROGRAM_GET_ENDPOINT}/${programId}`
 		);
 		if (!response.ok) {
 			alert("Failed to fetch program data.");
@@ -34,17 +38,14 @@ const loadProgramData = async (programId) => {
 
 const submitUpdateForm = async (event) => {
 	event.preventDefault();
-	const formData = Object.fromEntries(new FormData(event.target).entries());
+
+	const formData = plainToClass(GymProgramDTO, Object.fromEntries(new FormData(event.target).entries()));
 	formData.reps = parseInt(formData.reps, 10);
 
 	try {
 		const response = await fetch(
-			`http://localhost:5050/api/gym-programs/update/${formData.id}`,
-			{
-				method: "PUT",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(formData),
-			}
+			`${Endpoints.GYM_PROGRAM_UPDATE_ENDPOINT}/${formData.id}`,
+			constructPOST(formData)
 		);
 
 		if (response.ok) {
@@ -67,7 +68,7 @@ const submitUpdateForm = async (event) => {
 	}
 };
 
-const startProgramHandlers = () => {
+const startProgramHandlers = async () => {
 	const modal = document.getElementById("updateProgramModal");
 	const closeModalButton = document.getElementById("closeModalButton");
 	const programForm = document.getElementById("programForm");
@@ -87,7 +88,7 @@ const startProgramHandlers = () => {
 	const updateProgramForm = document.getElementById("updateProgramForm");
 	updateProgramForm.addEventListener("submit", submitUpdateForm);
 
-	displayPrograms();
+	await displayPrograms();
 };
 
-startProgramHandlers();
+await startProgramHandlers();
