@@ -19,7 +19,7 @@ export const updateMemberAsync = async (req, res) =>
 
     let memberEntity = database.tryGetMemberByID(memberID);
 
-    if (memberEntity === undefined)
+    if (memberEntity === null)
     {
         respondWithNotFoundError(
             res,
