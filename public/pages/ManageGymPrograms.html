@@ -1,89 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Manage Gym Programs</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+			integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer" />
+		<script type="module" src="../js/UpdateGymProgram.mjs"></script>
+		<script type="module" src="../js/CreateGymProgram.mjs"></script>
+	</head>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Manage Gym Programs</title>
-    <style>
-        .programModal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: grey;
-            justify-content: center;
-            align-items: center;
-        }
+	<body class="container mt-5">
+		<h1 id="gymProgramsTitle" class="mb-4">Gym Programs</h1>
+		<button id="openModalButton" class="btn btn-primary mb-3">
+			Create New Program
+		</button>
+		<div id="programList">
+			<h2>Current Programs</h2>
+		</div>
+		<div id="programModal" class="modal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="programModalLabel">
+							Create Gym Program
+						</h5>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+							id="closeModalButton"></button>
+					</div>
+					<div class="modal-body">
+						<form id="programForm">
+							<div class="mb-3">
+								<label for="name" class="form-label"
+									>Program Name:</label
+								>
+								<input
+									type="text"
+									id="name"
+									name="name"
+									class="form-control"
+									required />
+							</div>
+							<div class="mb-3">
+								<label for="focusBodyPart" class="form-label"
+									>Focus Body Part:</label
+								>
+								<select
+									id="focusBodyPart"
+									name="focusBodyPart"
+									class="form-select"
+									required>
+									<option value="upper">Upper</option>
+									<option value="lower">Lower</option>
+									<option value="back">Back</option>
+								</select>
+							</div>
+							<div class="mb-3">
+								<label for="difficulty" class="form-label"
+									>Difficulty:</label
+								>
+								<select
+									id="difficulty"
+									name="difficulty"
+									class="form-select"
+									required>
+									<option value="beginner">Beginner</option>
+									<option value="intermediate">
+										Intermediate
+									</option>
+									<option value="advanced">Advanced</option>
+								</select>
+							</div>
+							<div class="mb-3">
+								<label for="intensity" class="form-label"
+									>Intensity:</label
+								>
+								<select
+									id="intensity"
+									name="intensity"
+									class="form-select"
+									required>
+									<option value="mild">Mild</option>
+									<option value="average">Average</option>
+									<option value="high">High</option>
+								</select>
+							</div>
+							<div class="mb-3">
+								<label for="targetAudience" class="form-label"
+									>Target Audience:</label
+								>
+								<select
+									id="targetAudience"
+									name="targetAudience"
+									class="form-select"
+									required>
+									<option value="teenagers">Teenagers</option>
+									<option value="adults">Adults</option>
+									<option value="elders">Elders</option>
+								</select>
+							</div>
+							<div class="mb-3">
+								<label for="reps" class="form-label"
+									>Reps:</label
+								>
+								<input
+									type="number"
+									id="reps"
+									name="reps"
+									class="form-control"
+									min="1"
+									max="30"
+									required />
+							</div>
+							<button type="submit" class="btn btn-primary">
+								Create Program
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 
-        .modal-content {
-            width: 90%;
-            max-width: 500px;
-            background-color: white;
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .close-button {
-            float: right;
-            font-size: 20px;
-            cursor: pointer;
-        }
-    </style>
-    <script type="module" src="../js/CreateGymProgram.mjs"></script>
-</head>
-
-<body>
-    <h1 id="gymProgramsTitle">Gym Programs</h1>
-    <button id="openModalButton">Create New Program</button>
-    <div id="programList">
-        <h2>Current Programs</h2>
-    </div>
-    <div id="programModal" class="programModal">
-        <div class="modal-content">
-            <span id="closeModalButton" class="close-button">&times;</span>
-            <h2>Create Gym Program</h2>
-            <form id="programForm">
-                <label for="name">Program Name:</label>
-                <input type="text" id="name" name="name" required>
-                <br>
-                <label for="focusBodyPart">Focus Body Part:</label>
-                <select id="focusBodyPart" name="focusBodyPart" required>
-                    <option value="upper">Upper</option>
-                    <option value="lower">Lower</option>
-                    <option value="back">Back</option>
-                </select>
-                <br>
-                <label for="difficulty">Difficulty:</label>
-                <select id="difficulty" name="difficulty" required>
-                    <option value="beginner">Beginner</option>
-                    <option value="intermediate">Intermediate</option>
-                    <option value="advanced">Advanced</option>
-                </select>
-                <br>
-                <label for="intensity">Intensity:</label>
-                <select id="intensity" name="intensity" required>
-                    <option value="mild">Mild</option>
-                    <option value="average">Average</option>
-                    <option value="high">High</option>
-                </select>
-                <br>
-                <label for="targetAudience">Target Audience:</label>
-                <select id="targetAudience" name="targetAudience" required>
-                    <option value="teenagers">Teenagers</option>
-                    <option value="adults">Adults</option>
-                    <option value="elders">Elders</option>
-                </select>
-                <br>
-                <label for="reps">Reps:</label>
-                <input type="number" id="reps" name="reps" min="1" max="30" required>
-                <br>
-                <button type="submit">Create Program</button>
-            </form>
-        </div>
-    </div>
-
-</body>
-
+		<div id="updateProgramModal" class="modal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="updateProgramModalLabel">
+							Update Gym Program
+						</h5>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+							id="closeUpdateModalButton"></button>
+					</div>
+					<div class="modal-body">
+						<form id="updateProgramForm">
+							<input
+								type="hidden"
+								id="updateProgramId"
+								name="id" />
+							<div class="mb-3">
+								<label for="updateName" class="form-label"
+									>Program Name:</label
+								>
+								<input
+									type="text"
+									id="updateName"
+									name="name"
+									class="form-control"
+									required />
+							</div>
+							<div class="mb-3">
+								<label
+									for="updateFocusBodyPart"
+									class="form-label"
+									>Focus Body Part:</label
+								>
+								<select
+									id="updateFocusBodyPart"
+									name="focusBodyPart"
+									class="form-select"
+									required>
+									<option value="upper">Upper</option>
+									<option value="lower">Lower</option>
+									<option value="back">Back</option>
+								</select>
+							</div>
+							<div class="mb-3">
+								<label for="updateDifficulty" class="form-label"
+									>Difficulty:</label
+								>
+								<select
+									id="updateDifficulty"
+									name="difficulty"
+									class="form-select"
+									required>
+									<option value="beginner">Beginner</option>
+									<option value="intermediate">
+										Intermediate
+									</option>
+									<option value="advanced">Advanced</option>
+								</select>
+							</div>
+							<div class="mb-3">
+								<label for="updateIntensity" class="form-label"
+									>Intensity:</label
+								>
+								<select
+									id="updateIntensity"
+									name="intensity"
+									class="form-select"
+									required>
+									<option value="mild">Mild</option>
+									<option value="average">Average</option>
+									<option value="high">High</option>
+								</select>
+							</div>
+							<div class="mb-3">
+								<label
+									for="updateTargetAudience"
+									class="form-label"
+									>Target Audience:</label
+								>
+								<select
+									id="updateTargetAudience"
+									name="targetAudience"
+									class="form-select"
+									required>
+									<option value="teenagers">Teenagers</option>
+									<option value="adults">Adults</option>
+									<option value="elders">Elders</option>
+								</select>
+							</div>
+							<div class="mb-3">
+								<label for="updateReps" class="form-label"
+									>Reps:</label
+								>
+								<input
+									type="number"
+									id="updateReps"
+									name="reps"
+									class="form-control"
+									min="1"
+									max="30"
+									required />
+							</div>
+							<button type="submit" class="btn btn-primary">
+								Update Program
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>

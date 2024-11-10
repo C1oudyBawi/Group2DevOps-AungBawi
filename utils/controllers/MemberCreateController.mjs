@@ -25,13 +25,11 @@ export const createMemberAsync = async(req, res) =>
 
         gymPrograms = new Set(gymPrograms);
 
-        let existing_programs = database.programs;
-
         for (let programName of gymPrograms)
         {
-            let targetProgram = existing_programs.get(programName);
+            let targetProgram = database.tryGetGymProgramByName(programName);
 
-            if (targetProgram === undefined)
+            if (targetProgram === null)
             {
                 res.status(404).json({ message: `Program ( Name: ${programName} ) not found!` });
                 return;
@@ -46,7 +44,7 @@ export const createMemberAsync = async(req, res) =>
 
         let member = new MemberDTO(
         {
-            snowflakeID: generateSnowflake(),
+            id: generateSnowflake(),
             name: name,
             adminNumber: adminNumber,
             gymPrograms: Array.from(gymPrograms),
@@ -54,7 +52,7 @@ export const createMemberAsync = async(req, res) =>
 
         let generatedID = member.id;
 
-        database.members.set(generatedID, member);
+        database.tryCreateMember(member);
 
         await database.updateAsync();
 
