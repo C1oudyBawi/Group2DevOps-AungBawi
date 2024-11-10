@@ -2,19 +2,21 @@ import { tryReadJSONAsync, writeJSONAsync } from "../helpers/JsonHelpers.mjs";
 import { plainToClass, plainToClassFromExist} from "class-transformer";
 import { MemberDTO } from "../../common/dtos/MemberDTO.mjs";
 import { GymProgramDTO } from "../../common/dtos/GymProgramDTO.mjs";
+import { MemberEntity } from "./entities/MemberEntity.mjs";
+import { GymProgramEntity } from "./entities/GymProgramEntity.mjs";
 
 export class JSONDatabase
 {
     static DATABASE_PATH = "database.json";
 
     /**
-     * @type { Map<string, MemberDTO> }
+     * @type { Map<string, MemberEntity> }
      * @public
      */
     members;
 
     /**
-     * @type { Map<string, GymProgramDTO> }
+     * @type { Map<string, GymProgramEntity> }
      * @public
      */
     programs;
@@ -40,12 +42,6 @@ export class JSONDatabase
 
         if (database !== null)
         {
-            // // https://stackoverflow.com/questions/38922990/re-associating-an-object-with-its-class-after-deserialization-in-node-js
-            // database = Object.create(
-            //     JSONDatabase.prototype,
-            //     Object.getOwnPropertyDescriptors(database)
-            // );
-
             database = plainToClass(JSONDatabase, database);
 
             // Members is currently in the form of Map<string, Map>
@@ -61,7 +57,7 @@ export class JSONDatabase
                 // See: https://github.com/typestack/class-transformer/issues/132
 
                 // Construct MemberDTO instance, bypassing ctor.
-                let member = Reflect.construct(Object, [], MemberDTO);
+                let member = Reflect.construct(Object, [], MemberEntity);
 
                 member = plainToClassFromExist(member, rawData);
 
@@ -74,7 +70,7 @@ export class JSONDatabase
             {
                 let rawData = Object.fromEntries(value.entries());
 
-                let program = Reflect.construct(Object, [], GymProgramDTO);
+                let program = Reflect.construct(Object, [], GymProgramEntity);
 
                 program = plainToClassFromExist(program, rawData);
 
@@ -93,16 +89,27 @@ export class JSONDatabase
 
     /**
      * @param { string } id
+     * @returns { MemberEntity | null }
      */
-    getGymProgramByID = (id) =>
+    tryGetMemberByID = (id) =>
+    {
+        return this.members.get(id) ?? null;
+    }
+
+    /**
+     * @param { string } id
+     * @returns { GymProgramEntity | null }
+     */
+    tryGetGymProgramByID = (id) =>
     {
         return this.programs.get(id) ?? null;
     }
 
     /**
      * @param { string } name
+     * @returns { GymProgramEntity | null }
      */
-    getGymProgramByName = (name) =>
+    tryGetGymProgramByName = (name) =>
     {
         for (let program of this.programs.values())
         {
@@ -110,6 +117,42 @@ export class JSONDatabase
             {
                 return program;
             }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param { MemberDTO } memberDTO
+     * @returns { MemberEntity | null }
+     */
+    tryCreateMember = (memberDTO) =>
+    {
+        const memberID = memberDTO.id;
+
+        if (this.tryGetMemberByID(memberID) === null)
+        {
+            const entity = MemberEntity.fromDTO(memberDTO, this);
+            this.members.set(memberID, entity);
+            return entity;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param { GymProgramDTO } gymProgramDTO
+     * @returns { GymProgramEntity | null }
+     */
+    tryCreateGymProgram = (gymProgramDTO) =>
+    {
+        const programID = gymProgramDTO.id;
+
+        if (this.tryGetGymProgramByID(programID) === null)
+        {
+            const entity = GymProgramEntity.fromDTO(gymProgramDTO);
+            this.programs.set(programID, entity);
+            return entity;
         }
 
         return null;

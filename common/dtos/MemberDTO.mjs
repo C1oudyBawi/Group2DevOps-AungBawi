@@ -56,22 +56,22 @@ export class MemberDTO
   adminNumber;
 
   /**
-   * @type { GymProgramDTO[] }
+   * @type { string[] }
    * @public
    */
   gymPrograms;
 
   /**
-   * @param { bigint } snowflakeID
+   * @param { bigint } id
    * @param { string } name
    * @param { string } adminNumber
-   * @param { GymProgramDTO[] } gymPrograms
+   * @param { string[] } gymPrograms
    */
-  constructor({ snowflakeID, name, adminNumber, gymPrograms })
+  constructor({ id, name, adminNumber, gymPrograms })
   {
-    if (snowflakeID !== undefined)
+    if (id !== undefined)
     {
-        this.id = `${snowflakeID}`;
+        this.id = `${id}`;
     }
 
     else
@@ -92,7 +92,7 @@ export class MemberDTO
   {
       return new MemberDTO(
       {
-          snowflakeID: undefined,
+          id: undefined,
           name: schema.name,
           adminNumber: schema.adminNumber,
           gymPrograms: schema.gymPrograms

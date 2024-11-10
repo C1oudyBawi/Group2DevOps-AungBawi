@@ -17,9 +17,9 @@ export const updateMemberAsync = async (req, res) =>
     // We will never hit this route if id is undefined
     let memberID = req.params.id;
 
-    let member = database.members.get(memberID);
+    let memberEntity = database.tryGetMemberByID(memberID);
 
-    if (member === undefined)
+    if (memberEntity === undefined)
     {
         respondWithNotFoundError(
             res,
@@ -31,6 +31,8 @@ export const updateMemberAsync = async (req, res) =>
         );
         return;
     }
+
+    let memberDTO = memberEntity.toDTO(database);
 
     let parsedMember = await MemberUpdateDTOSchema.safeParseAsync(req.body);
 
@@ -44,12 +46,12 @@ export const updateMemberAsync = async (req, res) =>
 
     if (body.name !== undefined)
     {
-        member.name = body.name;
+        memberDTO.name = body.name;
     }
 
     if (body.adminNumber !== undefined)
     {
-        member.adminNumber = body.adminNumber;
+        memberDTO.adminNumber = body.adminNumber;
     }
 
     let gymPrograms = body.gymPrograms;
@@ -58,7 +60,7 @@ export const updateMemberAsync = async (req, res) =>
     {
         for (let programName of gymPrograms)
         {
-            let targetProgram = database.programs.get(programName);
+            let targetProgram = database.tryGetGymProgramByName(programName);
 
             if (targetProgram === undefined)
             {
@@ -82,7 +84,9 @@ export const updateMemberAsync = async (req, res) =>
             }
         }
 
-        member.gymPrograms = Array.from(gymPrograms);
+        memberDTO.gymPrograms = gymPrograms;
+
+        memberEntity.applyDTO(memberDTO, database);
     }
 
     await database.updateAsync();
