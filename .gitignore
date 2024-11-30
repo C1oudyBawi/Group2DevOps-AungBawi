@@ -472,3 +472,6 @@ database.json
 
 # Ignore dist directory
 /dist/
+
+# Ignore nyc / c8 coverage files
+/coverage/
