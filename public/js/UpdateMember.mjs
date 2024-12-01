@@ -129,6 +129,11 @@ class UpdateModal extends Modal
 }
 
 const updateMemberModal = new UpdateModal();
+updateMemberModal.modalElement.id = "update-member-modal";
+updateMemberModal.nameInputElement.id = "update-member-name";
+updateMemberModal.adminNumberInputElement.id = "update-member-admin-number";
+updateMemberModal.gymProgramsInputElement.id = "update-member-gym-programs";
+updateMemberModal.actionButtonElement.id = "update-member-button";
 
 const onLoadAsync = async () =>
 {

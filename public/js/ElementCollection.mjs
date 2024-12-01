@@ -1,5 +1,7 @@
 export class ElementCollection
 {
+    static MEMBER_CREATE_BUTTON_ID = "member-create-button";
+
     static MEMBER_CREATE_MODAL_ID = "member-create-modal";
 
     static MEMBER_CREATE_MODAL_LABEL_ID = "member-create-modal-label";
@@ -14,6 +16,16 @@ export class ElementCollection
 
     static MEMBER_LIST_CONTAINER_ID = "member-list-container";
 
+    static getMemberCreateButton()
+    {
+        return document.getElementById(ElementCollection.MEMBER_CREATE_BUTTON_ID);
+    }
+
+    static getMemberCreateButtonCypress()
+    {
+        return cy.get(`#${ElementCollection.MEMBER_CREATE_BUTTON_ID}`);
+    }
+
     static getMemberListContainer()
     {
         return document.getElementById(ElementCollection.MEMBER_LIST_CONTAINER_ID);
@@ -22,6 +34,11 @@ export class ElementCollection
     static getMemberCreateModal()
     {
         return document.getElementById(ElementCollection.MEMBER_CREATE_MODAL_ID);
+    }
+
+    static getMemberCreateModalCypress()
+    {
+        return cy.get(`#${ElementCollection.MEMBER_CREATE_MODAL_ID}`);
     }
 
     static getMemberCreateModalLabel()
@@ -50,5 +67,5 @@ export class ElementCollection
     }
 }
 
-// Do not reorder this, otherwise it will result in "Uncaught ReferenceError: Cannot access 'ElementCollection' before initialization"
-window.ElementCollection = ElementCollection;
+// // Do not reorder this, otherwise it will result in "Uncaught ReferenceError: Cannot access 'ElementCollection' before initialization"
+// window.ElementCollection = ElementCollection;

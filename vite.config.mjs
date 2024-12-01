@@ -13,13 +13,10 @@ function getAllHtmlFiles(dir)
     const files = fs.readdirSync(dir, { recursive: true });
 
     // Filter and process HTML files
-    files.forEach(file =>
-    {
-        if (typeof file === "string" && file.endsWith(".html"))
-        {
+    files.forEach(file => {
+        if (typeof file === "string" && file.endsWith(".html")) {
             // Create the entry name by removing .html and using forward slashes
             const entryName = file.slice(0, -5).split(path.sep).join('/');
-
             // Create the full file path
             const filePath = path.resolve(dir, file);
             results[entryName] = filePath;
@@ -29,8 +26,7 @@ function getAllHtmlFiles(dir)
     return results;
 }
 
-// export default is required for some reason
-// noinspection JSUnusedGlobalSymbols
+// Export the configuration
 export default defineConfig(
 {
     root: "public",
@@ -39,10 +35,9 @@ export default defineConfig(
         outDir: "../dist",
         emptyOutDir: true,
         assetsDir: "assets",
-        rollupOptions:
-        {
-            input: getAllHtmlFiles(path.resolve(__dirname, "public"))
-        }
+        rollupOptions: {
+            input: getAllHtmlFiles(path.resolve(__dirname, "public")),
+        },
     },
     publicDir: "public"
-})
+});
