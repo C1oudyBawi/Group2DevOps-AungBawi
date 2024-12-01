@@ -476,3 +476,4 @@ database.json
 # Ignore nyc / c8 files
 /coverage/
 /instrumented/
+/.nyc_output/
