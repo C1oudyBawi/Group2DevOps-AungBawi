@@ -5,8 +5,8 @@
   "main": "index.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vite build --sourcemap=true --minify false && node index.mjs",
     "build-frontend": "vite build --sourcemap=true --minify false",
+    "dev": "npm run build-frontend && node index.mjs",
     "backend-test": "c8 --config .nycrc-backend mocha",
     "frontend-instrument": "npm run build-frontend && rm -rf instrumented && cp -R dist instrumented && nyc instrument dist instrumented",
     "frontend-test": "npm run frontend-instrument && rm -rf .nyc_output && nyc --nycrc-path .nycrc-frontend cypress run",
