@@ -2,11 +2,11 @@ import { defineConfig } from "vite";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import fs from "node:fs";
-import istanbul from 'vite-plugin-istanbul'; // Import the plugin
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-function getAllHtmlFiles(dir) {
+function getAllHtmlFiles(dir)
+{
     let results = {};
 
     // Read all files in the directory
@@ -27,11 +27,11 @@ function getAllHtmlFiles(dir) {
 }
 
 // Export the configuration
-export default defineConfig({
+export default defineConfig(
+{
     root: "public",
-    build: {
-        minify: false,
-        sourcemap: true,
+    build:
+    {
         outDir: "../dist",
         emptyOutDir: true,
         assetsDir: "assets",
@@ -39,14 +39,5 @@ export default defineConfig({
             input: getAllHtmlFiles(path.resolve(__dirname, "public")),
         },
     },
-    publicDir: "public",
-    // plugins: [
-    //     istanbul({
-    //         include: 'assets/*',
-    //         exclude: ['node_modules', 'test/'],
-    //         extension: ['.js', '.mjs',],
-    //         cypress: true,
-    //         requireEnv: false, // Set to true if you want to instrument only when a specific env variable is set
-    //     }),
-    // ],
+    publicDir: "public"
 });

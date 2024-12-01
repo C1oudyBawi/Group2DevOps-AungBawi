@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-app.use(express.static(path.join(__dirname, "/dist")));
+app.use(express.static(path.join(__dirname, "/instrumented")));
 
 const ROUTER = express.Router();
 
@@ -39,7 +39,7 @@ ROUTER.use("/kill", KILL_ROUTER);
 app.get("/", (req, res) =>
 {
     // https://stackoverflow.com/questions/14594121/express-res-sendfile-throwing-forbidden-error
-    res.sendFile(path.resolve(`${__dirname}/dist/${START_PAGE}`));
+    res.sendFile(path.resolve(`${__dirname}/instrumented/${START_PAGE}`));
 });
 
 app.use("/api", ROUTER);

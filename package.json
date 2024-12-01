@@ -8,8 +8,9 @@
     "dev": "vite build --sourcemap=true --minify false && node index.mjs",
     "build-frontend": "vite build --sourcemap=true --minify false",
     "backend-test": "c8 --config .nycrc-backend mocha",
-    "frontend-test": "npm run build-frontend && rm -rf .nyc_output && c8 --config .nycrc-frontend cypress run",
-    "frontend-cypress-gui": "npm run build-frontend && c8 --config .nycrc-frontend cypress open"
+    "frontend-instrument": "npm run build-frontend && rm -rf instrumented && cp -R dist instrumented && nyc instrument dist instrumented",
+    "frontend-test": "npm run frontend-instrument && rm -rf .nyc_output && nyc --nycrc-path .nycrc-frontend cypress run",
+    "frontend-cypress-gui": "npm run frontend-instrument && rm -rf .nyc_output && nyc --nycrc-path .nycrc-frontend cypress open"
   },
   "author": "",
   "license": "ISC",

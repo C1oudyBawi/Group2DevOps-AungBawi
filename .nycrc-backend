@@ -1,10 +1,13 @@
-{ 
-    "reporter": [ 
+{
+    "all": true,
+    "reporter":
+    [
         "text", 
         "html" 
     ], 
-    "include": [ 
-        "utils/**/*.mjs"
+    "include":
+    [
+        "utils/controllers/**/*"
     ], 
     "reportDir": "coverage/backend", 
     "branches": 80, 
