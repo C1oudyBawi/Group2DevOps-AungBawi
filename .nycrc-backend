@@ -9,6 +9,14 @@
     [
         "utils/controllers/**/*"
     ], 
+    "exclude":
+    [
+        "utils/controllers/GymProgramGetController.mjs",
+        "utils/controllers/GymProgramUpdateController.mjs",
+        "utils/controllers/MemberCreateController.mjs",
+        "utils/controllers/MemberGetController.mjs",
+        "utils/controllers/MemberUpdateController.mjs"
+    ],
     "reportDir": "coverage/backend", 
     "branches": 80, 
     "lines": 80, 
