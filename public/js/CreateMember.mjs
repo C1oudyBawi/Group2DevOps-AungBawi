@@ -1,6 +1,7 @@
 // For modules ( .mjs ), we need to export the function
 
 import { ElementCollection } from "./ElementCollection.mjs";
+import {Endpoints} from "./Endpoints.mjs";
 
 window.createMember = createMember;
 
@@ -36,7 +37,7 @@ export function createMember() {
 
     // Sending POST request to backend API
     const request = new XMLHttpRequest();
-    request.open("POST", "/api/members/create", true); 
+    request.open("POST", Endpoints.MEMBER_CREATE_ENDPOINT, true);
     request.setRequestHeader('Content-Type', 'application/json');
 
     request.onload = function ()
