@@ -9,9 +9,9 @@
     "build-frontend": "vite build --sourcemap=true --minify false",
     "dev": "concurrently \"npm run preview-frontend\" \"node index.mjs\"",
     "backend-test": "c8 --config .nycrc-backend mocha",
-    "frontend-instrument": "npm run build-frontend && rm -rf instrumented && cp -R dist instrumented && nyc instrument dist instrumented",
-    "frontend-test": "npm run frontend-instrument && rm -rf .nyc_output && nyc --nycrc-path .nycrc-frontend cypress run",
-    "frontend-cypress-gui": "npm run frontend-instrument && rm -rf .nyc_output && nyc --nycrc-path .nycrc-frontend cypress open"
+    "frontend-instrument": "npm run build-frontend && node npm-scripts/copy-code-to-instrumented-directory.mjs && nyc instrument dist instrumented",
+    "frontend-test": "npm run frontend-instrument && node npm-scripts/remove-nyc-output-directory.mjs && nyc --nycrc-path .nycrc-frontend cypress run",
+    "frontend-cypress-gui": "npm run frontend-instrument && node npm-scripts/remove-nyc-output-directory.mjs && nyc --nycrc-path .nycrc-frontend cypress open"
   },
   "author": "",
   "license": "ISC",
