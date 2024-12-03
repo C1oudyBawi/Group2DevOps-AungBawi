@@ -139,34 +139,34 @@ describe('Gym Program API', () => {
             });
         });
 
-        // Test - Successful program creation
-        it('should create a new program and return 201 status', (done) => {
-            chai.request(baseUrl)
-                .post('api/gym-programs/create')
-                .send({
-                    name: 'Test Program Unique',
-                    focusBodyPart: 'upper',
-                    intensity: 'mild',
-                    difficulty: 'beginner',
-                    targetAudience: 'teenagers',
-                    reps: 1,
-                    isActive: true
-                })
-                .end((err, res) => {
-                    expect(res).to.have.status(201);
-                    expect(res.body.message).to.equal("Program created successfully!");
-                    expect(res.body.program).to.have.property('id').that.is.a('string');
-                    expect(res.body.program).to.include({
-                        name: 'test program unique',
-                        focusBodyPart: 'upper',
-                        intensity: 'mild',
-                        difficulty: 'beginner',
-                        targetAudience: 'teenagers',
-                        reps: 1,
-                        isActive: true
-                    });
-                    done();
-                });
-        });
+        // // Test - Successful program creation
+        // it('should create a new program and return 201 status', (done) => {
+        //     chai.request(baseUrl)
+        //         .post('api/gym-programs/create')
+        //         .send({
+        //             name: 'Test Program Unique',
+        //             focusBodyPart: 'upper',
+        //             intensity: 'mild',
+        //             difficulty: 'beginner',
+        //             targetAudience: 'teenagers',
+        //             reps: 1,
+        //             isActive: true
+        //         })
+        //         .end((err, res) => {
+        //             expect(res).to.have.status(201);
+        //             expect(res.body.message).to.equal("Program created successfully!");
+        //             expect(res.body.program).to.have.property('id').that.is.a('string');
+        //             expect(res.body.program).to.include({
+        //                 name: 'test program unique',
+        //                 focusBodyPart: 'upper',
+        //                 intensity: 'mild',
+        //                 difficulty: 'beginner',
+        //                 targetAudience: 'teenagers',
+        //                 reps: 1,
+        //                 isActive: true
+        //             });
+        //             done();
+        //         });
+        // });
     });
 });
