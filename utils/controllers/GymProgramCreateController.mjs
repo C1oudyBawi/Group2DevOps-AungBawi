@@ -28,6 +28,16 @@ export const createProgram = async (req, res) => {
 		targetAudience,
 	].map((str) => str.toLowerCase());
 
+	const database = DB_INSTANCE;
+	const existingPrograms = database.programs;
+	const lowerCaseName = name.toLowerCase();
+
+	const isDuplicate = Array.from(existingPrograms.values()).some(program => program.name.toLowerCase() === lowerCaseName);
+
+	if (isDuplicate) {
+		errors.push("Program with this name already exists.");
+	}
+
 	// Validation
 	if (!name || typeof name !== "string") {
 		errors.push("Name is required and should be a string.");
@@ -53,8 +63,8 @@ export const createProgram = async (req, res) => {
 		);
 	}
 
-	if (!reps || typeof reps !== "number") {
-		errors.push("Reps must be a number.");
+	if (!reps || typeof reps !== "number" || reps <= 0) {
+		errors.push("Reps must be a positive number.");
 	}
 
 	// Validation for difficulty and intensity levels
@@ -84,15 +94,10 @@ export const createProgram = async (req, res) => {
 		}
 	}
 
-	const database = DB_INSTANCE;
-	const existingPrograms = database.programs;
-
-	if (existingPrograms.has(name)) {
-		errors.push("Program with this name already exists.");
-	}
-
 	// Return errors if validation fails
 	if (errors.length > 0) {
+		console.log(errors);
+
 		return res.status(400).json({ errors });
 	}
 
@@ -106,7 +111,7 @@ export const createProgram = async (req, res) => {
 			targetAudience,
 			reps,
 			isActive,
-	}));
+		}));
 
 	await database.updateAsync();
 
