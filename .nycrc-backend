@@ -15,7 +15,8 @@
         "utils/controllers/GymProgramUpdateController.mjs",
         "utils/controllers/MemberCreateController.mjs",
         "utils/controllers/MemberGetController.mjs",
-        "utils/controllers/MemberUpdateController.mjs"
+        "utils/controllers/MemberUpdateController.mjs",
+        "utils/controllers/GymProgramDeleteController.mjs"
     ],
     "reportDir": "coverage/backend", 
     "branches": 80, 

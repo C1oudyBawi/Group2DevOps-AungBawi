@@ -32,6 +32,7 @@ export const createProgram = async (req, res) => {
 	const existingPrograms = database.programs;
 	const lowerCaseName = name.toLowerCase();
 
+	// Converts values of programs into array and test if program's name is the same as lowerCaseName
 	const isDuplicate = Array.from(existingPrograms.values()).some(program => program.name.toLowerCase() === lowerCaseName);
 
 	if (isDuplicate) {
@@ -97,10 +98,10 @@ export const createProgram = async (req, res) => {
 	// Return errors if validation fails
 	if (errors.length > 0) {
 		console.log(errors);
-
 		return res.status(400).json({ errors });
 	}
 
+	// Create a new program if every validation checks out
 	const newProgram = database.tryCreateGymProgram(
 		new GymProgramDTO({
 			id: generateSnowflake(),
@@ -114,6 +115,8 @@ export const createProgram = async (req, res) => {
 		}));
 
 	await database.updateAsync();
+
+	console.log("Program created successfully:", newProgram.name.toUpperCase());
 
 	// Return the newly created program
 	res.status(201).json({

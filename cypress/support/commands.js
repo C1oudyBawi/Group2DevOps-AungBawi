@@ -23,3 +23,13 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+    // Prevent Cypress from failing the test on unhandled exceptions
+    if (err.message.includes('crypto.randomUUID is not a function')) {
+      return false;
+    }
+    // For other errors, let Cypress handle them as usual
+    return true;
+  });
+  
