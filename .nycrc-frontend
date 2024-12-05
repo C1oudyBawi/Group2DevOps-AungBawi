@@ -7,14 +7,17 @@
     ],
     "include":
     [
-        "public/js/**/*"
+        "public/js/**/*.mjs"
     ],
     "exclude":
     [
         "public/js/helpers/**/*",
         "public/js/ElementCollection.mjs",
         "public/js/Endpoints.mjs",
-        "public/js/Modal.mjs"
+        "public/js/Modal.mjs",
+        "public/js/CreateMember.mjs",
+        "public/js/UpdateGymProgram.mjs",
+        "public/js/UpdateMember.mjs"
     ],
     "reportDir": "coverage/frontend",
     "check-coverage": true,
