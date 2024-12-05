@@ -1,5 +1,6 @@
 import { openUpdateModal } from "./UpdateGymProgram.mjs";
-
+// import { v4 as uuidv4 } from "uuid";
+// formData.id = uuidv4();
 function openModal(modal) {
 	modal.style.display = "block";
 }
@@ -40,15 +41,12 @@ export async function displayPrograms() {
                 <p class="card-text">Focus: ${program.focusBodyPart}</p>
                 <p class="card-text">Difficulty: ${program.difficulty}</p>
                 <p class="card-text">Intensity: ${program.intensity}</p>
-                <p class="card-text">Target Audience: ${
-					program.targetAudience
+                <p class="card-text">Target Audience: ${program.targetAudience
 				}</p>
                 <p class="card-text">Repetitions: ${program.reps}</p>
-                <p class="card-text">Status: ${
-					program.isActive ? "Active" : "Inactive"
+                <p class="card-text">Status: ${program.isActive ? "Active" : "Inactive"
 				}</p>
-				<button class="btn btn-secondary btn-sm update-button" data-id="${
-					program.id
+				<button class="btn btn-secondary btn-sm update-button" data-id="${program.id
 				}">Update</button>
             `;
 
@@ -58,14 +56,14 @@ export async function displayPrograms() {
 		});
 		programListDiv.appendChild(rowDiv);
 
-		document.querySelectorAll(".update-button").forEach((button) => {
-			button.addEventListener("click", (event) => {
-				const programId = event.target.getAttribute("data-id");
-				openUpdateModal(programId);
-			});
-		});
+		// document.querySelectorAll(".update-button").forEach((button) => {
+		// 	button.addEventListener("click", (event) => {
+		// 		const programId = event.target.getAttribute("data-id");
+		// 		openUpdateModal(programId);
+		// 	});
+		// });
 	} catch (error) {
-		console.error("Error displaying programs:", error);
+		// console.error("Error displaying programs:", error);
 	}
 }
 
@@ -73,9 +71,10 @@ async function submitForm(event) {
 	event.preventDefault();
 	const formData = Object.fromEntries(new FormData(event.target).entries());
 	formData.reps = parseInt(formData.reps, 10);
-	formData.id = crypto.randomUUID(); // Generate a unique ID for the new program
+	formData.id = crypto.randomUUID(); // Generate a unique ID for the new program// Use uuid.4v() to generate a unique ID
 
 	try {
+		console.log("Form Data:", formData);
 		const response = await fetch(
 			"http://localhost:5050/api/gym-programs/create",
 			{
@@ -94,9 +93,9 @@ async function submitForm(event) {
 			const errorData = await response.json();
 			alert(
 				"Error creating program: " +
-					(errorData.errors
-						? errorData.errors.join(", ")
-						: "Unknown error!")
+				(errorData.errors
+					? errorData.errors.join(", ")
+					: "Unknown error!")
 			);
 		}
 	} catch (error) {

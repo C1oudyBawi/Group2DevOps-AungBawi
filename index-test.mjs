@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-app.use(express.static(path.join(__dirname, "/instrumented")));
+app.use(express.static(path.join(__dirname, "./instrumented")));
 
 const ROUTER = express.Router();
 
