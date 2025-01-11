@@ -82,7 +82,7 @@ describe('Gym Program API', () => {
                 .send(validProgram)
                 .end((err, res) => {
                     expect(res).to.have.status(400);
-                    expect(res.body.errors).to.include("Program with this name already exists!.");
+                    expect(res.body.errors).to.include("Program with this name already exists.");
                     done();
                 });
         });
