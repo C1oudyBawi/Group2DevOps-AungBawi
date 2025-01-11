@@ -4,6 +4,7 @@ describe('Create Gym Program Frontend', () => {
   before(() => {
     cy.task('startServer').then((url) => {
       baseUrl = url;
+      console.log(baseUrl)
     });
   });
 
