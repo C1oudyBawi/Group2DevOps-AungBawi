@@ -12,6 +12,7 @@ describe('Gym Program API', () => {
     before(async () => {
         const { address, port } = await server.address();
         baseUrl = `http://${address === '::' ? 'localhost' : address}:${port}/`;
+        console.log(baseUrl)
     });
 
     beforeEach((done) => {
