@@ -29,7 +29,7 @@ export const createProgram = async (req, res) => {
 	].map((str) => (typeof str === "string" ? str.toLowerCase() : str));
 
 	const database = DB_INSTANCE;
-	// const existingPrograms = database.programs;
+	const existingPrograms = database.programs;
 	// const lowerCaseName = name.toLowerCase();
 
 	// // Converts values of programs into array and test if program's name is the same as lowerCaseName
@@ -39,7 +39,7 @@ export const createProgram = async (req, res) => {
 	// 	errors.push("Program with this name already exists.");
 	// }
 
-	if (!existingPrograms || typeof existingPrograms.values !== "function") {
+	if (!existingPrograms) {
 		return res.status(500).json({ message: "Internal error: Program list is unavailable." });
 	}
 
