@@ -36,7 +36,7 @@ export const createProgram = async (req, res) => {
 	const isDuplicate = Array.from(existingPrograms.values()).some(program => program.name.toLowerCase() === lowerCaseName);
 
 	if (isDuplicate) {
-		errors.push("Program with this name already exist!!!s.");
+		errors.push("Program with this name already exists.");
 	}
 
 	// Validation
