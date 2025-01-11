@@ -1,6 +1,6 @@
 export class Endpoints
 {
-    static BASE_URL = "http://localhost:5050";
+    static BASE_URL = "";
     static API_ENDPOINT = `${Endpoints.BASE_URL}/api`;
 
     static MEMBER_ENDPOINT = `${Endpoints.API_ENDPOINT}/members`;

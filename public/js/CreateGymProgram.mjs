@@ -11,7 +11,7 @@ export function closeModal(modal) {
 
 export async function displayPrograms() {
 	try {
-		const response = await fetch("http://localhost:5050/api/gym-programs");
+		const response = await fetch("/api/gym-programs");
 		if (!response.ok) {
 			alert("Failed to fetch programs.");
 			return;
@@ -20,7 +20,7 @@ export async function displayPrograms() {
 		const programs = await response.json();
 		const programArray = programs.programs;
 		const programListDiv = document.getElementById("programList");
-		programListDiv.innerHTML = ""; // Clear any existing content
+		programListDiv.innerHTML = "";
 
 		const rowDiv = document.createElement("div");
 		rowDiv.className = "row";
@@ -76,7 +76,7 @@ async function submitForm(event) {
 	try {
 		console.log("Form Data:", formData);
 		const response = await fetch(
-			"http://localhost:5050/api/gym-programs/create",
+			"/api/gym-programs/create",
 			{
 				method: "POST",
 				headers: { "Content-Type": "application/json" },

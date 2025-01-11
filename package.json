@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "preview-frontend": "vite",
     "build-frontend": "vite build --sourcemap=true --minify false",
+    "production": "npm run build-frontend && node index.mjs",
     "dev": "concurrently \"npm run preview-frontend\" \"node index.mjs\"",
     "backend-test": "c8 --config .nycrc-backend mocha",
     "frontend-instrument": "npm run build-frontend && node npm-scripts/copy-code-to-instrumented-directory.mjs && nyc instrument dist instrumented",
