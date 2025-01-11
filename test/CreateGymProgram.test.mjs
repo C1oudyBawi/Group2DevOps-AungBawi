@@ -12,7 +12,24 @@ describe('Gym Program API', () => {
     before(async () => {
         const { address, port } = await server.address();
         baseUrl = `http://${address === '::' ? 'localhost' : address}:${port}/`;
-        console.log(baseUrl)
+        console.log(baseUrl);
+        
+        const programNames = ['Test Program', 'Test Program Unique'];
+        const deleteRequests = programNames.map((name) =>
+            chai.request(baseUrl)
+                .delete('api/gym-programs/delete-by-name')
+                .send({ name })
+        );
+
+        try {
+            const responses = await Promise.all(deleteRequests);
+            responses.forEach((res, index) => {
+                console.log(`Deleted: ${programNames[index]}`, res.body);
+            });
+        } catch (err) {
+            console.error('Error during initial cleanup:', err.message);
+        }
+
     });
 
     beforeEach((done) => {
@@ -45,6 +62,7 @@ describe('Gym Program API', () => {
             reps: 1
         };
 
+        // Test - Create new por
         it('should return 201 if program is created', (done) => {
             chai
                 .request(baseUrl)
