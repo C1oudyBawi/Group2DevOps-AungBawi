@@ -26,22 +26,35 @@ export const createProgram = async (req, res) => {
 		intensity,
 		difficulty,
 		targetAudience,
-	].map((str) => str.toLowerCase());
+	].map((str) => (typeof str === "string" ? str.toLowerCase() : str));
 
 	const database = DB_INSTANCE;
-	const existingPrograms = database.programs;
-	const lowerCaseName = name.toLowerCase();
+	// const existingPrograms = database.programs;
+	// const lowerCaseName = name.toLowerCase();
 
-	// Converts values of programs into array and test if program's name is the same as lowerCaseName
-	const isDuplicate = Array.from(existingPrograms.values()).some(program => program.name.toLowerCase() === lowerCaseName);
+	// // Converts values of programs into array and test if program's name is the same as lowerCaseName
+	// const isDuplicate = Array.from(existingPrograms.values()).some(program => program.name.toLowerCase() === lowerCaseName);
 
-	if (isDuplicate) {
-		errors.push("Program with this name already exists.");
+	// if (isDuplicate) {
+	// 	errors.push("Program with this name already exists.");
+	// }
+
+	if (!existingPrograms || typeof existingPrograms.values !== "function") {
+		return res.status(500).json({ message: "Internal error: Program list is unavailable." });
 	}
 
 	// Validation
 	if (!name || typeof name !== "string") {
 		errors.push("Name is required and should be a string.");
+	} else {
+		const lowerCaseName = name.toLowerCase();
+		const isDuplicate = Array.from(existingPrograms.values()).some(
+			(program) => program.name.toLowerCase() === lowerCaseName
+		);
+
+		if (isDuplicate) {
+			errors.push("Program with this name already exists.");
+		}
 	}
 
 	if (!["upper", "lower", "back"].includes(focusBodyPart)) {
