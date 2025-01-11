@@ -45,6 +45,17 @@ describe('Gym Program API', () => {
             reps: 1
         };
 
+        it('should return 201 if program is created', (done) => {
+            chai
+                .request(baseUrl)
+                .post('api/gym-programs/create')
+                .send(validProgram)
+                .end((err, res) => {
+                    expect(res).to.have.status(201);
+                    done();
+                });
+        });
+
         // Test - Duplicate program name
         it('should return 400 if program with the same name already exists', (done) => {
             chai
