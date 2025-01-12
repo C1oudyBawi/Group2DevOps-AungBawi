@@ -23,7 +23,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: 16
 
       # Step 3: Install dependencies
       - name: Install Dependencies
@@ -36,7 +36,3 @@ jobs:
       # Step 5: Run frontend tests
       - name: Run Frontend Tests
         run: npm run frontend-test
-
-      # Step 6: Build the frontend
-      - name: Build Frontend
-        run: npm run build-frontend
