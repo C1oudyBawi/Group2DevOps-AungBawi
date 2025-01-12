@@ -1,0 +1,42 @@
+name: Full CI/CD Pipeline
+
+# Trigger the workflow on every push to the main branch or pull requests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Step 3: Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Step 4: Run backend tests
+      - name: Run Backend Tests
+        run: npm run backend-test
+
+      # Step 5: Run frontend tests
+      - name: Run Frontend Tests
+        run: npm run frontend-test
+
+      # Step 6: Build the frontend
+      - name: Build Frontend
+        run: npm run build-frontend
