@@ -477,3 +477,7 @@ database.json
 /coverage/
 /instrumented/
 /.nyc_output/
+
+prometheus/prometheus-3.2.0-rc.1.windows-amd64/data/
+prometheus/prometheus-3.2.0-rc.1.windows-amd64/prometheus.exe
+prometheus/prometheus-3.2.0-rc.1.windows-amd64/promtool.exe
